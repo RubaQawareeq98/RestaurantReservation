@@ -8,4 +8,5 @@ public class MenuItem
     public decimal Price { get; set; }
     public int RestaurantId { get; set; }
     public required Restaurant Restaurant { get; set; }
+    public List<OrderItem> OrderItems { get; set; } = [];
 }

@@ -9,4 +9,5 @@ public class Restaurant
     public List<Table> Tables { get; set; } = [];
     public List<Reservation> Reservations { get; set; } = [];
     public List<MenuItem> MenuItems { get; set; } = [];
+    public List<OpeningHour> OpeningHours { get; set; } = [];
 }

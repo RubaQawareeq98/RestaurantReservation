@@ -9,4 +9,5 @@ public class Employee
     public required Position Position { get; set; }
     public int RestaurantId { get; set; }
     public required Restaurant Restaurant { get; set; }
+    public List<Order> Orders { get; set; } = [];
 }

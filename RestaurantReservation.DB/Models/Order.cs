@@ -9,4 +9,5 @@ public class Order
     public required Reservation Reservation { get; set; }
     public int EmployeeId { get; set; }
     public required Employee Employee { get; set; }
+    public List<OrderItem> Items { get; set; } = [];
 }

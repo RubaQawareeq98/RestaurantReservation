@@ -7,4 +7,5 @@ public class Restaurant
     public required string Phone { get; set; }
     public required string Address { get; set; }
     public List<Table> Tables { get; set; } = [];
+    public List<Reservation> Reservations { get; set; } = [];
 }

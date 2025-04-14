@@ -1,0 +1,32 @@
+[
+  {
+    "Id": 1,
+    "Name": "Restaurant 1",
+    "Address": "Nablus",
+    "PhoneNumber": "256478912"
+  },
+  {
+    "Id": 2,
+    "Name": "Restaurant 2",
+    "Address": "Jenin",
+    "PhoneNumber": "256478459"
+  },
+  {
+    "Id": 3,
+    "Name": "Restaurant 3",
+    "Address": "Nablus",
+    "PhoneNumber": "123478912"
+  },
+  {
+    "Id": 4,
+    "Name": "Restaurant 4",
+    "Address": "Jericho",
+    "PhoneNumber": "785478912"
+  },
+  {
+    "Id": 5,
+    "Name": "Restaurant 5",
+    "Address": "Nablus",
+    "PhoneNumber": "587478912"
+  }
+]

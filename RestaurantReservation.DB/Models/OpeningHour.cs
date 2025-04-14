@@ -7,5 +7,5 @@ public class OpeningHour
     public TimeSpan OpenHour { get; set; }
     public TimeSpan CloseHour { get; set; }
     public int RestaurantId { get; set; }
-    public required Restaurant Restaurant { get; set; }
+    public Restaurant Restaurant { get; set; }
 }

@@ -12,8 +12,8 @@ using RestaurantReservation.DB;
 namespace RestaurantReservation.DB.Migrations
 {
     [DbContext(typeof(RestaurantReservationDbContext))]
-    [Migration("20250413002403_CreateDatabaseEntities")]
-    partial class CreateDatabaseEntities
+    [Migration("20250414160557_UpdateModels")]
+    partial class UpdateModels
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

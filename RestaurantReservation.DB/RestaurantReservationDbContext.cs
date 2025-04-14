@@ -15,6 +15,7 @@ public class RestaurantReservationDbContext : DbContext
     public DbSet<Restaurant> Restaurants { get; set; }
     public DbSet<Table> Tables { get; set; }
     public DbSet<Reservation> Reservations { get; set; }
+    public DbSet<PaymentDetail> PaymentDetails { get; set; }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -58,6 +59,9 @@ public class RestaurantReservationDbContext : DbContext
             .WithMany(o => o.OrderItems)
             .HasForeignKey(o => o.OrderId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<PaymentDetail>()
+            .HasKey(p => p.OrderId);
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

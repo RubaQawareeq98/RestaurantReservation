@@ -10,4 +10,5 @@ public class Order
     public int EmployeeId { get; set; }
     public Employee Employee { get; set; }
     public List<OrderItem> OrderItems { get; set; } = [];
+    public PaymentDetail PaymentDetail { get; set; }
 }

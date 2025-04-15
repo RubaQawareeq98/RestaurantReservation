@@ -20,8 +20,10 @@ public class RestaurantReservationDbContext : DbContext
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer("Data Source = lenovo\\SQLEXPRESS01; Initial Catalog = RestaurantReservationCore; Integrated Security = True; Encrypt = false")
-            .LogTo(Console.WriteLine);
+        optionsBuilder.UseSqlServer(
+                "Data Source = lenovo\\SQLEXPRESS01; Initial Catalog = RestaurantReservationCore; Integrated Security = True; Encrypt = false")
+            // .LogTo(Console.WriteLine);
+            ;
     }
 
     private static void OnDeleteConfiguration(ModelBuilder modelBuilder)

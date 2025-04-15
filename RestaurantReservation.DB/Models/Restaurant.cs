@@ -11,4 +11,9 @@ public class Restaurant
     public List<Reservation> Reservations { get; set; } = [];
     public List<MenuItem> MenuItems { get; set; } = [];
     public List<OpeningHour> OpeningHours { get; set; } = [];
+
+    public override string ToString()
+    {
+        return $"Restaurant: {Name}, Address: {Address}, PhoneNumber: {PhoneNumber} | Tables: {Tables.Count} | Reservations: {Reservations.Count} | OpeningHours: {OpeningHours.Count}";
+    }
 }

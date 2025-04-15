@@ -14,7 +14,7 @@ public class EmployeeRepository (RestaurantReservationDbContext context) : BaseR
         var isExist = await IsEntityExist(entity.Id);
         if (!isExist)
         {
-            throw new NoRecordFoundException("Entity not found");
+            throw new NoRecordFoundException();
         }
         
         var employee = await _context.Employees

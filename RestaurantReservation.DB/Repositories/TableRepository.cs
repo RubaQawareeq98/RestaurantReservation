@@ -14,7 +14,7 @@ public class TableRepository (RestaurantReservationDbContext context) : BaseRepo
         var isExist = await IsEntityExist(entity.Id);
         if (!isExist)
         {
-            throw new NoRecordFoundException("Entity not found");
+            throw new NoRecordFoundException();
         }
         
         var table = await _context.Tables

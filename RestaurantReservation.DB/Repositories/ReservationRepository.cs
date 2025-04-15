@@ -15,7 +15,7 @@ public class ReservationRepository(RestaurantReservationDbContext context)
         var isExist = await IsEntityExist(entity.Id);
         if (!isExist)
         {
-            throw new NoRecordFoundException("Entity not found");
+            throw new NoRecordFoundException();
         }
         
         var reservation = await _context.Reservations
@@ -35,7 +35,7 @@ public class ReservationRepository(RestaurantReservationDbContext context)
         var isExist = await IsEntityExist(customerId);
         if (!isExist)
         {
-            throw new NoRecordFoundException("Entity not found");
+            throw new NoRecordFoundException();
         }
         
         return await _context.Reservations

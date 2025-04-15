@@ -23,7 +23,7 @@ public class BaseRepository<T>(RestaurantReservationDbContext context) : IBaseRe
         var isExist = await IsEntityExist(entity.Id);
         if (!isExist)
         {
-            throw new NoRecordFoundException("No record found");
+            throw new NoRecordFoundException();
         }
         _entitySet.Remove(entity);
         await context.SaveChangesAsync();
@@ -36,7 +36,7 @@ public class BaseRepository<T>(RestaurantReservationDbContext context) : IBaseRe
         var isExist = await IsEntityExist(entity.Id);
         if (!isExist)
         {
-            throw new NoRecordFoundException("No record found");
+            throw new NoRecordFoundException();
         }
         
         _entitySet.Update(entity);

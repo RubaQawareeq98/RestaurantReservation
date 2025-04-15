@@ -28,4 +28,12 @@ public class EmployeeRepository (RestaurantReservationDbContext context) : BaseR
         _context.Employees.Remove(employee);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<List<Employee>> GetManagers()
+    {
+        return 
+            await _context.Employees
+                .Where(e => e.PositionId == 1)
+                .ToListAsync();
+    }
 }

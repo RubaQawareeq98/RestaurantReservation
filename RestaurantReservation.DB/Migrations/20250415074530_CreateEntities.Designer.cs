@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RestaurantReservation.DB;
 
@@ -11,9 +12,11 @@ using RestaurantReservation.DB;
 namespace RestaurantReservation.DB.Migrations
 {
     [DbContext(typeof(RestaurantReservationDbContext))]
-    partial class RestaurantReservationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250415074530_CreateEntities")]
+    partial class CreateEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,48 +56,6 @@ namespace RestaurantReservation.DB.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Customers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Email = "johndoe@gmail.com",
-                            FirstName = "John",
-                            LastName = "Doe",
-                            PhoneNumber = "12345678"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Email = "ruban@gmail.com",
-                            FirstName = "Ruba",
-                            LastName = "Qa",
-                            PhoneNumber = "42345678"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Email = "ali@gmail.com",
-                            FirstName = "Ali",
-                            LastName = "Doe",
-                            PhoneNumber = "52345678"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Email = "hiba@gmail.com",
-                            FirstName = "Hiba",
-                            LastName = "Doe",
-                            PhoneNumber = "62345678"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Email = "mohammad@gmail.com",
-                            FirstName = "Mohammad",
-                            LastName = "Doe",
-                            PhoneNumber = "52345678"
-                        });
                 });
 
             modelBuilder.Entity("RestaurantReservation.DB.Models.Employee", b =>
@@ -128,48 +89,6 @@ namespace RestaurantReservation.DB.Migrations
                     b.HasIndex("RestaurantId");
 
                     b.ToTable("Employees");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            FirstName = "Masa",
-                            LastName = "Ahmad",
-                            PositionId = 1,
-                            RestaurantId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            FirstName = "Khaled",
-                            LastName = "Isa",
-                            PositionId = 2,
-                            RestaurantId = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            FirstName = "Jehad",
-                            LastName = "Mohammad",
-                            PositionId = 3,
-                            RestaurantId = 3
-                        },
-                        new
-                        {
-                            Id = 4,
-                            FirstName = "Wael",
-                            LastName = "Khaled",
-                            PositionId = 4,
-                            RestaurantId = 4
-                        },
-                        new
-                        {
-                            Id = 5,
-                            FirstName = "Waleed",
-                            LastName = "Awad",
-                            PositionId = 5,
-                            RestaurantId = 5
-                        });
                 });
 
             modelBuilder.Entity("RestaurantReservation.DB.Models.MenuItem", b =>
@@ -202,48 +121,6 @@ namespace RestaurantReservation.DB.Migrations
                     b.HasIndex("RestaurantId");
 
                     b.ToTable("MenuItems");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "Description1",
-                            Name = "Home",
-                            Price = 10m,
-                            RestaurantId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "Description2",
-                            Name = "Menu",
-                            Price = 10m,
-                            RestaurantId = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "Description3",
-                            Name = "Menu",
-                            Price = 10m,
-                            RestaurantId = 3
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Description = "Description4",
-                            Name = "Menu",
-                            Price = 10m,
-                            RestaurantId = 4
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Description = "Description5",
-                            Name = "Menu",
-                            Price = 10m,
-                            RestaurantId = 5
-                        });
                 });
 
             modelBuilder.Entity("RestaurantReservation.DB.Models.OpeningHour", b =>
@@ -271,64 +148,6 @@ namespace RestaurantReservation.DB.Migrations
                     b.HasIndex("RestaurantId");
 
                     b.ToTable("OpeningHours");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CloseHour = new TimeSpan(0, 17, 0, 0, 0),
-                            DayOfWeek = 1,
-                            OpenHour = new TimeSpan(0, 9, 0, 0, 0),
-                            RestaurantId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CloseHour = new TimeSpan(0, 17, 0, 0, 0),
-                            DayOfWeek = 2,
-                            OpenHour = new TimeSpan(0, 10, 30, 0, 0),
-                            RestaurantId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CloseHour = new TimeSpan(0, 17, 0, 0, 0),
-                            DayOfWeek = 3,
-                            OpenHour = new TimeSpan(0, 9, 0, 0, 0),
-                            RestaurantId = 2
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CloseHour = new TimeSpan(0, 20, 0, 0, 0),
-                            DayOfWeek = 4,
-                            OpenHour = new TimeSpan(0, 9, 0, 0, 0),
-                            RestaurantId = 3
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CloseHour = new TimeSpan(0, 21, 0, 0, 0),
-                            DayOfWeek = 5,
-                            OpenHour = new TimeSpan(0, 9, 0, 0, 0),
-                            RestaurantId = 3
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CloseHour = new TimeSpan(0, 18, 0, 0, 0),
-                            DayOfWeek = 6,
-                            OpenHour = new TimeSpan(0, 10, 0, 0, 0),
-                            RestaurantId = 3
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CloseHour = new TimeSpan(0, 18, 0, 0, 0),
-                            DayOfWeek = 0,
-                            OpenHour = new TimeSpan(0, 8, 0, 0, 0),
-                            RestaurantId = 4
-                        });
                 });
 
             modelBuilder.Entity("RestaurantReservation.DB.Models.Order", b =>
@@ -355,43 +174,6 @@ namespace RestaurantReservation.DB.Migrations
                     b.HasIndex("ReservationId");
 
                     b.ToTable("Orders");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            EmployeeId = 1,
-                            OrderDate = new DateTime(2025, 3, 15, 7, 46, 45, 612, DateTimeKind.Local),
-                            ReservationId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            EmployeeId = 2,
-                            OrderDate = new DateTime(2025, 3, 15, 7, 46, 45, 612, DateTimeKind.Local),
-                            ReservationId = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            EmployeeId = 3,
-                            OrderDate = new DateTime(2025, 3, 15, 7, 46, 45, 612, DateTimeKind.Local),
-                            ReservationId = 3
-                        },
-                        new
-                        {
-                            Id = 4,
-                            EmployeeId = 4,
-                            OrderDate = new DateTime(2025, 3, 15, 7, 46, 45, 612, DateTimeKind.Local),
-                            ReservationId = 4
-                        },
-                        new
-                        {
-                            Id = 5,
-                            EmployeeId = 5,
-                            OrderDate = new DateTime(2025, 3, 15, 7, 46, 45, 612, DateTimeKind.Local),
-                            ReservationId = 5
-                        });
                 });
 
             modelBuilder.Entity("RestaurantReservation.DB.Models.OrderItem", b =>
@@ -418,36 +200,6 @@ namespace RestaurantReservation.DB.Migrations
                     b.HasIndex("OrderId");
 
                     b.ToTable("OrderItems");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            MenuItemId = 1,
-                            OrderId = 1,
-                            Quantity = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            MenuItemId = 2,
-                            OrderId = 2,
-                            Quantity = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            MenuItemId = 3,
-                            OrderId = 3,
-                            Quantity = 1
-                        },
-                        new
-                        {
-                            Id = 4,
-                            MenuItemId = 4,
-                            OrderId = 4,
-                            Quantity = 1
-                        });
                 });
 
             modelBuilder.Entity("RestaurantReservation.DB.Models.PaymentDetail", b =>
@@ -471,48 +223,6 @@ namespace RestaurantReservation.DB.Migrations
                     b.HasKey("OrderId");
 
                     b.ToTable("PaymentDetails");
-
-                    b.HasData(
-                        new
-                        {
-                            OrderId = 1,
-                            Amount = 4m,
-                            PaymentDate = new DateTime(2025, 3, 15, 7, 46, 45, 612, DateTimeKind.Local),
-                            PaymentMethod = 0,
-                            PaymentNumber = 1
-                        },
-                        new
-                        {
-                            OrderId = 2,
-                            Amount = 5m,
-                            PaymentDate = new DateTime(2025, 3, 15, 7, 46, 45, 612, DateTimeKind.Local),
-                            PaymentMethod = 0,
-                            PaymentNumber = 2
-                        },
-                        new
-                        {
-                            OrderId = 3,
-                            Amount = 6m,
-                            PaymentDate = new DateTime(2025, 3, 15, 7, 46, 45, 612, DateTimeKind.Local),
-                            PaymentMethod = 1,
-                            PaymentNumber = 3
-                        },
-                        new
-                        {
-                            OrderId = 4,
-                            Amount = 7m,
-                            PaymentDate = new DateTime(2025, 3, 15, 7, 46, 45, 612, DateTimeKind.Local),
-                            PaymentMethod = 1,
-                            PaymentNumber = 4
-                        },
-                        new
-                        {
-                            OrderId = 5,
-                            Amount = 8m,
-                            PaymentDate = new DateTime(2025, 3, 15, 7, 46, 45, 612, DateTimeKind.Local),
-                            PaymentMethod = 1,
-                            PaymentNumber = 5
-                        });
                 });
 
             modelBuilder.Entity("RestaurantReservation.DB.Models.Position", b =>
@@ -531,33 +241,6 @@ namespace RestaurantReservation.DB.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Positions");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Manager"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Waiter"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Manager"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Chef"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Accounter"
-                        });
                 });
 
             modelBuilder.Entity("RestaurantReservation.DB.Models.Reservation", b =>
@@ -592,53 +275,6 @@ namespace RestaurantReservation.DB.Migrations
                     b.HasIndex("TableId");
 
                     b.ToTable("Reservations");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CustomerId = 1,
-                            PartySize = 2,
-                            ReservationDate = new DateTime(2025, 4, 15, 7, 55, 55, 612, DateTimeKind.Local).AddTicks(8581),
-                            RestaurantId = 1,
-                            TableId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CustomerId = 2,
-                            PartySize = 4,
-                            ReservationDate = new DateTime(2025, 4, 20, 7, 46, 45, 612, DateTimeKind.Local),
-                            RestaurantId = 2,
-                            TableId = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CustomerId = 3,
-                            PartySize = 11,
-                            ReservationDate = new DateTime(2025, 3, 15, 7, 46, 45, 612, DateTimeKind.Local),
-                            RestaurantId = 3,
-                            TableId = 3
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CustomerId = 4,
-                            PartySize = 5,
-                            ReservationDate = new DateTime(2025, 3, 20, 7, 46, 45, 612, DateTimeKind.Local),
-                            RestaurantId = 4,
-                            TableId = 4
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CustomerId = 5,
-                            PartySize = 4,
-                            ReservationDate = new DateTime(2025, 3, 15, 7, 46, 45, 612, DateTimeKind.Local),
-                            RestaurantId = 5,
-                            TableId = 5
-                        });
                 });
 
             modelBuilder.Entity("RestaurantReservation.DB.Models.Restaurant", b =>
@@ -667,43 +303,6 @@ namespace RestaurantReservation.DB.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Restaurants");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Address = "Nablus",
-                            Name = "Restaurant 1",
-                            PhoneNumber = "256478912"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Address = "Jenin",
-                            Name = "Restaurant 2",
-                            PhoneNumber = "256478459"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Address = "Nablus",
-                            Name = "Restaurant 3",
-                            PhoneNumber = "123478912"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Address = "Jericho",
-                            Name = "Restaurant 4",
-                            PhoneNumber = "785478912"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Address = "Nablus",
-                            Name = "Restaurant 5",
-                            PhoneNumber = "587478912"
-                        });
                 });
 
             modelBuilder.Entity("RestaurantReservation.DB.Models.Table", b =>
@@ -725,38 +324,6 @@ namespace RestaurantReservation.DB.Migrations
                     b.HasIndex("RestaurantId");
 
                     b.ToTable("Tables");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Capacity = 3,
-                            RestaurantId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Capacity = 4,
-                            RestaurantId = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Capacity = 5,
-                            RestaurantId = 3
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Capacity = 6,
-                            RestaurantId = 4
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Capacity = 7,
-                            RestaurantId = 5
-                        });
                 });
 
             modelBuilder.Entity("RestaurantReservation.DB.Models.Employee", b =>

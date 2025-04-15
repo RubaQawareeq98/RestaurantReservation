@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using RestaurantReservation.DB.Models;
+using RestaurantReservation.DB.Seeds;
 
 namespace RestaurantReservation.DB;
 
@@ -19,23 +20,18 @@ public class RestaurantReservationDbContext : DbContext
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer("Data Source = lenovo\\SQLEXPRESS01; Initial Catalog = RestaurantReservationCore; Integrated Security = True; Encrypt = false");
+        optionsBuilder.UseSqlServer("Data Source = lenovo\\SQLEXPRESS01; Initial Catalog = RestaurantReservationCore; Integrated Security = True; Encrypt = false")
+            .LogTo(Console.WriteLine);
     }
-    
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+
+    private static void OnDeleteConfiguration(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Reservation>()
             .HasOne(r => r.Table)
             .WithMany(t => t.Reservations)
             .HasForeignKey(r => r.TableId)
             .OnDelete(DeleteBehavior.Restrict); 
-
-        modelBuilder.Entity<Reservation>()
-            .HasOne(r => r.Customer)
-            .WithMany()
-            .HasForeignKey(r => r.CustomerId)
-            .OnDelete(DeleteBehavior.Cascade);
-
+        
         modelBuilder.Entity<Reservation>()
             .HasOne(r => r.Restaurant)
             .WithMany(r => r.Reservations)
@@ -62,6 +58,43 @@ public class RestaurantReservationDbContext : DbContext
 
         modelBuilder.Entity<PaymentDetail>()
             .HasKey(p => p.OrderId);
+    }
+
+
+    private static void SeedEntities(ModelBuilder modelBuilder)
+    {
+        var restaurants = EntitiesSeed.SeedRestaurants();
+        var tables = EntitiesSeed.SeedTables();
+        var orders = EntitiesSeed.SeedOrders();
+        var paymentDetails = EntitiesSeed.SeedPaymentDetails();
+        var orderItems = EntitiesSeed.SeedOrderItems();
+        var menuItems = EntitiesSeed.SeedMenuItems();
+        var customers = EntitiesSeed.SeedCustomers();
+        var employees = EntitiesSeed.SeedEmployees();
+        var reservations = EntitiesSeed.SeedReservations();
+        var positions = EntitiesSeed.SeedPositions();
+        var openingHours = EntitiesSeed.SeedOpeningHours();
+        
+        modelBuilder.Entity<Customer>().HasData(customers);
+        modelBuilder.Entity<Restaurant>().HasData(restaurants);
+        modelBuilder.Entity<Table>().HasData(tables);
+        modelBuilder.Entity<Position>().HasData(positions);
+        modelBuilder.Entity<OpeningHour>().HasData(openingHours);
+        modelBuilder.Entity<Employee>().HasData(employees);
+        modelBuilder.Entity<Reservation>().HasData(reservations);
+        modelBuilder.Entity<MenuItem>().HasData(menuItems);
+        modelBuilder.Entity<OrderItem>().HasData(orderItems);
+        modelBuilder.Entity<Order>().HasData(orders);
+        modelBuilder.Entity<PaymentDetail>().HasData(paymentDetails);
+    }
+    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+      
+        OnDeleteConfiguration(modelBuilder);
+        SeedEntities(modelBuilder);
+        
+         
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

@@ -29,4 +29,17 @@ public class ReservationRepository(RestaurantReservationDbContext context)
         _context.Reservations.Remove(reservation);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<List<Reservation>> GetReservationsByCustomer(int customerId)
+    {
+        var isExist = await IsEntityExist(customerId);
+        if (!isExist)
+        {
+            throw new NoRecordFoundException("Entity not found");
+        }
+        
+        return await _context.Reservations
+            .Where(r => r.CustomerId == customerId)
+            .ToListAsync();
+    }
 }

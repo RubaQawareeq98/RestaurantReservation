@@ -29,7 +29,7 @@ public class EmployeeRepository (RestaurantReservationDbContext context) : BaseR
         await _context.SaveChangesAsync();
     }
 
-    public async Task<List<Employee>> GetManagers()
+    public async Task<List<Employee>> GetManagersAsync()
     {
         return 
             await _context.Employees

@@ -36,4 +36,12 @@ public class EmployeeRepository (RestaurantReservationDbContext context) : BaseR
                 .Where(e => e.PositionId == 1)
                 .ToListAsync();
     }
+
+    public async Task<decimal> CalculateAverageOrderAmount(int employeeId)
+    {
+        return await _context.Orders
+            .Where(e => e.EmployeeId == employeeId)
+            .Select(o => o.PaymentDetail.Amount)
+            .AverageAsync();
+    }
 }

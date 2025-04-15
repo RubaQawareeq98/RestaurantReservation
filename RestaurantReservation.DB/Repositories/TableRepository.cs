@@ -1,32 +1,31 @@
 using Microsoft.EntityFrameworkCore;
-using RestaurantReservation.DB.Models;
+using RestaurantReservation.DB.Exceptions;
+using RestaurantReservation.DB.Models.Entities;
 using RestaurantReservation.DB.Repositories.Interfaces;
 
 namespace RestaurantReservation.DB.Repositories;
 
-public class TableRepository (RestaurantReservationDbContext context) : ITableRepository
+public class TableRepository (RestaurantReservationDbContext context) : BaseRepository<Table> (context), ITableRepository 
 {
-    public async Task<List<Table>> GetTablesAsync()
-    {
-        var tables = await context.Tables.ToListAsync();
-        return tables;
-    }
+    private readonly RestaurantReservationDbContext _context = context;
 
-    public async Task AddTableAsync(Table table)
+    public override async Task DeleteAsync(Table entity)
     {
-        await context.Tables.AddAsync(table);
-        await context.SaveChangesAsync();
-    }
+        var isExist = await IsEntityExist(entity.Id);
+        if (!isExist)
+        {
+            throw new NoRecordFoundException("Entity not found");
+        }
+        
+        var table = await _context.Tables
+            .Include(t => t.Reservations)
+            .FirstAsync(t => t.Id == entity.Id);
 
-    public async Task DeleteTableAsync(Table table)
-    {
-        context.Tables.Remove(table);
-        await context.SaveChangesAsync();
-    }
-
-    public async Task UpdateTableAsync(Table table)
-    {
-        context.Tables.Update(table);
-        await context.SaveChangesAsync();
+        foreach (var reservation in table.Reservations)
+        {
+            reservation.TableId = null;
+        }
+        _context.Tables.Remove(table);
+        await _context.SaveChangesAsync();
     }
 }

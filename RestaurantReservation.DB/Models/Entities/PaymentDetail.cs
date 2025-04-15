@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using RestaurantReservation.DB.Models.Entities;
 
-namespace RestaurantReservation.DB.Models;
+namespace RestaurantReservation.DB.Models.Entities;
 
 public class PaymentDetail
 {

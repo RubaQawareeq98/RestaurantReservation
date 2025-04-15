@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using RestaurantReservation.DB.Models.Interfaces;
 
-namespace RestaurantReservation.DB.Models;
+namespace RestaurantReservation.DB.Models.Entities;
 
-public class MenuItem
+public class MenuItem : IEntity
 {
     public int Id { get; set; }
     

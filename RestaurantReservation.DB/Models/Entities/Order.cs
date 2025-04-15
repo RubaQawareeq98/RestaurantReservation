@@ -1,6 +1,8 @@
-namespace RestaurantReservation.DB.Models;
+using RestaurantReservation.DB.Models.Interfaces;
 
-public class Order
+namespace RestaurantReservation.DB.Models.Entities;
+
+public class Order : IEntity
 {
     public int Id { get; set; }
     

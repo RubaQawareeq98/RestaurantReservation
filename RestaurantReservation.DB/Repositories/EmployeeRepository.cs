@@ -1,32 +1,31 @@
 using Microsoft.EntityFrameworkCore;
-using RestaurantReservation.DB.Models;
+using RestaurantReservation.DB.Exceptions;
+using RestaurantReservation.DB.Models.Entities;
 using RestaurantReservation.DB.Repositories.Interfaces;
 
 namespace RestaurantReservation.DB.Repositories;
 
-public class EmployeeRepository (RestaurantReservationDbContext context) : IEmployeeRepository
+public class EmployeeRepository (RestaurantReservationDbContext context) : BaseRepository<Employee> (context), IEmployeeRepository
 {
-    public async Task<List<Employee>> GetEmployeesAsync()
-    {
-        var employees = await context.Employees.ToListAsync();
-        return employees;
-    }
+    private readonly RestaurantReservationDbContext _context = context;
 
-    public async Task AddEmployeeAsync(Employee employee)
+    public override async Task DeleteAsync(Employee entity)
     {
-        context.Employees.Add(employee);
-        await context.SaveChangesAsync();
-    }
+        var isExist = await IsEntityExist(entity.Id);
+        if (!isExist)
+        {
+            throw new NoRecordFoundException("Entity not found");
+        }
+        
+        var employee = await _context.Employees
+            .Include(e => e.Orders)
+            .FirstAsync(e => e.Id == entity.Id);
 
-    public async Task DeleteEmployeeAsync(Employee employee)
-    {
-        context.Employees.Remove(employee);
-        await context.SaveChangesAsync();
-    }
-
-    public async Task UpdateEmployeeAsync(Employee employee)
-    {
-        context.Employees.Update(employee);
-        await context.SaveChangesAsync();
+        foreach (var order in employee.Orders)
+        {
+            order.EmployeeId = null;
+        }
+        _context.Employees.Remove(employee);
+        await _context.SaveChangesAsync();
     }
 }

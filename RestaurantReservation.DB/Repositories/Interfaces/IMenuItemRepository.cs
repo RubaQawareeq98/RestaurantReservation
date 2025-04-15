@@ -1,11 +1,5 @@
-using RestaurantReservation.DB.Models;
+using RestaurantReservation.DB.Models.Entities;
 
 namespace RestaurantReservation.DB.Repositories.Interfaces;
 
-public interface IMenuItemRepository
-{
-    Task<List<MenuItem>> GetMenuItemsAsync();
-    Task AddMenuItemAsync(MenuItem menuItem);
-    Task DeleteMenuItemAsync(MenuItem menuItem);
-    Task UpdateMenuItemAsync(MenuItem menuItem);
-}
+public interface IMenuItemRepository : IBaseRepository<MenuItem>;

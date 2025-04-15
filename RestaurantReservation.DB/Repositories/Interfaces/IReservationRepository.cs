@@ -1,11 +1,5 @@
-using RestaurantReservation.DB.Models;
+using RestaurantReservation.DB.Models.Entities;
 
 namespace RestaurantReservation.DB.Repositories.Interfaces;
 
-public interface IReservationRepository
-{
-    Task<List<Reservation>> GetReservationsAsync();
-    Task AddReservationAsync(Reservation reservation);
-    Task DeleteReservationAsync(Reservation reservation);
-    Task UpdateReservationAsync(Reservation reservation);
-}
+public interface IReservationRepository : IBaseRepository<Reservation>;

@@ -38,9 +38,7 @@ public class RestaurantReservationDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlServer(
-                "Data Source = lenovo\\SQLEXPRESS01; Initial Catalog = RestaurantReservationCore; Integrated Security = True; Encrypt = false")
-            //.LogTo(Console.WriteLine);
-            ;
+                "Data Source = lenovo\\SQLEXPRESS01; Initial Catalog = RestaurantReservationCore; Integrated Security = True; Encrypt = false");
     }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -54,10 +52,19 @@ public class RestaurantReservationDbContext : DbContext
         modelBuilder.Entity<EmployeeWithRestaurantDetails>()
             .ToView("EmployeeWithRestaurantDetails")
             .HasNoKey();
+
+        modelBuilder.HasDbFunction(
+            typeof(RestaurantReservationDbContext).GetMethod(nameof(CalculateTotalRevenue),
+                [typeof(int)])!
+        ).HasName("fn_CalculateTotalRevenue");
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.Properties<string>().HaveMaxLength(100);
     }
+
+    [DbFunction("fn_CalculateTotalRevenue", "dbo")]
+    public static decimal CalculateTotalRevenue(int restaurantId)
+        => throw new NotImplementedException();
 }

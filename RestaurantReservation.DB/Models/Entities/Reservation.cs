@@ -26,6 +26,6 @@ public class Reservation : IEntity
 
     public override string ToString()
     {
-        return $"Id: {Id}, ReservationDate: {ReservationDate}, PartySize: {PartySize}";
+        return $"Id: {Id}, ReservationDate: {ReservationDate}, PartySize: {PartySize} Customer: {CustomerId}, Table: {TableId}, Restaurant: {RestaurantId}";
     }
 }

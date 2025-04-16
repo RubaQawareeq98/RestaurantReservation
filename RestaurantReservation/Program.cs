@@ -159,6 +159,25 @@ static class Program
         }
         managers.ForEach(Console.WriteLine);
     }
+
+    private static async Task GetReservationsByCustomer()
+    {
+        Console.WriteLine("Getting Enter the Customer ID");
+        var isValid = int.TryParse(Console.ReadLine(), out var customerId);
+        if (!isValid)
+        {
+            throw new ArgumentException("Please enter a valid integer");
+        }
+        IReservationRepository reservationRepository = new ReservationRepository(_context);
+        var reservations = await reservationRepository.GetReservationsByCustomer(customerId);
+
+        if (reservations.Count == 0)
+        {
+            Console.WriteLine("There are no reservations");
+        }
+        reservations.ForEach(Console.WriteLine);
+    }
+    
     static async Task Main()
     {
         //await TestCustomerCrudOperations();
@@ -169,6 +188,7 @@ static class Program
         //await TestOrderCrudOperations();
         // await TestOrderItemCrudOperations();
         // await TestMenuItemCrudOperations();
-        await ListManagers();
+        //await ListManagers();
+        await GetReservationsByCustomer();
     }
 }

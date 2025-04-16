@@ -10,8 +10,10 @@ public class ReservationRepository(RestaurantReservationDbContext context)
 {
     private readonly RestaurantReservationDbContext _context = context;
 
-    public override async Task DeleteAsync(Reservation entity)
+    public override async Task DeleteAsync(Reservation? entity)
     {
+        ArgumentNullException.ThrowIfNull(entity);
+        
         var isExist = await IsEntityExist(entity.Id);
         if (!isExist)
         {
@@ -32,12 +34,6 @@ public class ReservationRepository(RestaurantReservationDbContext context)
 
     public async Task<List<Reservation>> GetReservationsByCustomer(int customerId)
     {
-        var isExist = await IsEntityExist(customerId);
-        if (!isExist)
-        {
-            throw new NoRecordFoundException();
-        }
-        
         return await _context.Reservations
             .Where(r => r.CustomerId == customerId)
             .ToListAsync();

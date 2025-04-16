@@ -2,7 +2,7 @@ namespace RestaurantReservation.DB.Views;
 
 public class ReservationDetails
 {
-    public int Id { get; set; }
+    public int ReservationId { get; set; }
     public DateTime ReservationDate { get; set; }
     public int PartySize { get; set; }
     public int? TableId { get; set; }

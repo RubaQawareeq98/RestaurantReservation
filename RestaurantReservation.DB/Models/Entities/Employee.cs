@@ -22,6 +22,6 @@ public class Employee : IEntity
 
     public override string ToString()
     {
-        return $"{FirstName} {LastName} | {RestaurantId}";
+        return $"Employee: {FirstName} {LastName} | {RestaurantId}";
     }
 }

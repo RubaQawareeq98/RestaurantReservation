@@ -148,6 +148,17 @@ static class Program
         restaurants.ForEach(Console.WriteLine);
     }
 
+    private static async Task ListManagers()
+    {
+        IEmployeeRepository employeeRepository = new EmployeeRepository(_context);
+        var managers = await employeeRepository.GetManagersAsync();
+
+        if (managers.Count == 0)
+        {
+            Console.WriteLine("There are no managers");
+        }
+        managers.ForEach(Console.WriteLine);
+    }
     static async Task Main()
     {
         //await TestCustomerCrudOperations();
@@ -155,8 +166,9 @@ static class Program
         //await TestRestaurantCrudOperations();
         //await TestReservationCrudOperations();
         //await TestTableCrudOperations();
-        await TestOrderCrudOperations();
+        //await TestOrderCrudOperations();
         // await TestOrderItemCrudOperations();
         // await TestMenuItemCrudOperations();
+        await ListManagers();
     }
 }

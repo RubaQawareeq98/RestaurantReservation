@@ -5,7 +5,7 @@ using RestaurantReservation.DB.Repositories.Repos;
 
 namespace RestaurantReservation;
 
-class Program
+static class Program
 {
     private static RestaurantReservationDbContext _context = new RestaurantReservationDbContext();
 
@@ -24,9 +24,27 @@ class Program
         
         customers.ForEach(Console.WriteLine);
     }
-
-    static async Task Main(string[] args)
+    
+    private static async Task TestEmployeeCrudOperations()
     {
-        await TestCustomerCrudOperations();
+        IEmployeeRepository employeeRepository = new EmployeeRepository(_context);
+        
+        var employee = new Employee() { FirstName = "Eman", LastName = "Ahmad", PositionId = 2, RestaurantId = 3};
+        await employeeRepository.AddAsync(employee);
+
+        employee.RestaurantId = 2;
+        await employeeRepository.UpdateAsync(employee);
+
+        var employees = await employeeRepository.GetAllAsync();
+        var deletedEmployee = employees.FirstOrDefault();
+        await employeeRepository.DeleteAsync(deletedEmployee);
+        
+        employees.ForEach(Console.WriteLine);
+    }
+
+    static async Task Main()
+    {
+       // await TestCustomerCrudOperations();
+        await TestEmployeeCrudOperations();
     }
 }

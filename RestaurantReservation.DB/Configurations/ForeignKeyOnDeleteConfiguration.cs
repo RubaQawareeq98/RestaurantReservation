@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using RestaurantReservation.DB.Models;
+using RestaurantReservation.DB.Models.Entities;
 
 namespace RestaurantReservation.DB.Configurations;
 
@@ -83,5 +83,4 @@ public static class ForeignKeyOnDeleteConfiguration
         modelBuilder.Entity<PaymentDetail>()
             .HasKey(p => p.OrderId);
     }
-
 }

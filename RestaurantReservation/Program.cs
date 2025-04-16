@@ -87,8 +87,42 @@ static class Program
         await tableRepository.UpdateAsync(table);
 
         var restaurants = await tableRepository.GetAllAsync();
-        var deletedRestaurant = restaurants.FirstOrDefault();
-        await tableRepository.DeleteAsync(deletedRestaurant);
+        var deletedTable = restaurants.FirstOrDefault();
+        await tableRepository.DeleteAsync(deletedTable);
+        
+        restaurants.ForEach(Console.WriteLine);
+    }
+
+    private static async Task TestOrderCrudOperations()
+    {
+        IOrderRepository orderRepository = new OrderRepository(_context);
+
+        var order = new Order { ReservationId = 4, OrderDate = DateTime.Now, EmployeeId = 2};
+        await orderRepository.AddAsync(order);
+
+        order.EmployeeId = 4;
+        await orderRepository.UpdateAsync(order);
+
+        var restaurants = await orderRepository.GetAllAsync();
+        var deletedOrder = restaurants.FirstOrDefault();
+        await orderRepository.DeleteAsync(deletedOrder);
+        
+        restaurants.ForEach(Console.WriteLine);
+    }
+
+    private static async Task TestOrderItemCrudOperations()
+    {
+        IOrderItemRepository orderItemRepository = new OrderItemRepository(_context);
+
+        var orderItem = new OrderItem { OrderId = 2, MenuItemId = 1, Quantity = 7 };
+        await orderItemRepository.AddAsync(orderItem);
+
+        orderItem.Quantity = 12;
+        await orderItemRepository.UpdateAsync(orderItem);
+
+        var restaurants = await orderItemRepository.GetAllAsync();
+        var deletedOrderItem = restaurants.FirstOrDefault();
+        await orderItemRepository.DeleteAsync(deletedOrderItem);
         
         restaurants.ForEach(Console.WriteLine);
     }
@@ -100,5 +134,7 @@ static class Program
         await TestRestaurantCrudOperations();
         await TestReservationCrudOperations();
         await TestTableCrudOperations();
+        await TestOrderCrudOperations();
+        await TestOrderItemCrudOperations();
     }
 }

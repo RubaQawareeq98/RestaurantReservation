@@ -29,7 +29,7 @@ static class Program
     {
         IEmployeeRepository employeeRepository = new EmployeeRepository(_context);
         
-        var employee = new Employee() { FirstName = "Eman", LastName = "Ahmad", PositionId = 2, RestaurantId = 3};
+        var employee = new Employee { FirstName = "Eman", LastName = "Ahmad", PositionId = 2, RestaurantId = 3};
         await employeeRepository.AddAsync(employee);
 
         employee.RestaurantId = 2;
@@ -41,10 +41,28 @@ static class Program
         
         employees.ForEach(Console.WriteLine);
     }
+ 
+    private static async Task TestRestaurantCrudOperations()
+    {
+        IRestaurantRepository restaurantRepository = new RestaurantRepository(_context);
+        
+        var restaurant = new Restaurant {Name = "Restaurant7", Address = "Nablus", PhoneNumber = "123456789"};
+        await restaurantRepository.AddAsync(restaurant);
+
+        restaurant.Name = "KFC";
+        await restaurantRepository.UpdateAsync(restaurant);
+
+        var restaurants = await restaurantRepository.GetAllAsync();
+        var deletedRestaurant = restaurants.FirstOrDefault();
+        await restaurantRepository.DeleteAsync(deletedRestaurant);
+        
+        restaurants.ForEach(Console.WriteLine);
+    }
 
     static async Task Main()
     {
-       // await TestCustomerCrudOperations();
-        await TestEmployeeCrudOperations();
+        //await TestCustomerCrudOperations();
+        //await TestEmployeeCrudOperations();
+        await TestRestaurantCrudOperations();
     }
 }

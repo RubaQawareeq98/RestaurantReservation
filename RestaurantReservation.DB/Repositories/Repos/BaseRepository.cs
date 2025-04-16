@@ -3,7 +3,7 @@ using RestaurantReservation.DB.Exceptions;
 using RestaurantReservation.DB.Models.Interfaces;
 using RestaurantReservation.DB.Repositories.Interfaces;
 
-namespace RestaurantReservation.DB.Repositories;
+namespace RestaurantReservation.DB.Repositories.Repos;
 
 public class BaseRepository<T>(RestaurantReservationDbContext context) : IBaseRepository <T> where T : class, IEntity
 {

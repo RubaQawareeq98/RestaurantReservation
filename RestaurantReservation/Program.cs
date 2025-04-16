@@ -202,6 +202,13 @@ static class Program
         }
         menuItems.ForEach(Console.WriteLine);
     }
+
+    private static async Task CalculateAverageOrderAmount(int employeeId)
+    {
+        IEmployeeRepository employeeRepository = new EmployeeRepository(_context);
+        var averageOrderAmount = await employeeRepository.CalculateAverageOrderAmount(employeeId);
+        Console.WriteLine($"Average order amount: {averageOrderAmount}");
+    }
     
     static async Task Main()
     {
@@ -217,6 +224,7 @@ static class Program
         // await GetReservationsByCustomer();
 
         //await ListOrdersAndMenuItems(1);
-        await ListOrderedMenuItems(4);
+        //await ListOrderedMenuItems(4);
+        await CalculateAverageOrderAmount(4);
     }
 }

@@ -11,6 +11,54 @@ namespace RestaurantReservation;
 static class Program
 {
     private const string Message = "Please enter a valid integer";
+    
+        static async Task Main()
+    {
+        using IHost host = Host.CreateDefaultBuilder()
+            .ConfigureServices((_, services) =>
+            {
+                services.AddDbContext<RestaurantReservationDbContext>();
+                services.AddScoped<ICustomerRepository, CustomerRepository>();
+                services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+                services.AddScoped<IReservationRepository, ReservationRepository>();
+                services.AddScoped<IOrderRepository, OrderRepository>();
+                services.AddScoped<IOrderItemRepository, OrderItemRepository>();
+                services.AddScoped<IMenuItemRepository, MenuItemRepository>();
+                services.AddScoped<IRestaurantRepository, RestaurantRepository>();
+                services.AddScoped<ITableRepository, TableRepository>();
+            })
+            .Build();
+        
+        using var scope = host.Services.CreateScope();
+        var services = scope.ServiceProvider;
+        
+        var context = services.GetRequiredService<RestaurantReservationDbContext>();
+        
+        var customerRepo = services.GetRequiredService<ICustomerRepository>();
+        var employeeRepo = services.GetRequiredService<IEmployeeRepository>();
+        var orderRepo = services.GetRequiredService<IOrderRepository>();
+        var orderItemRepo = services.GetRequiredService<IOrderItemRepository>();
+        var restaurantRepo = services.GetRequiredService<IRestaurantRepository>();
+        var reservationRepo = services.GetRequiredService<IReservationRepository>();
+        var menuItemRepo = services.GetRequiredService<IMenuItemRepository>();
+        var tableRepository = services.GetRequiredService<ITableRepository>();
+        
+        await CallCustomerCrudOperations(customerRepo);
+        await CallEmployeeCrudOperations(employeeRepo);
+        await CallRestaurantCrudOperations(restaurantRepo);
+        await CallReservationCrudOperations(reservationRepo);
+        await CallTableCrudOperations(tableRepository);
+        await CallOrderCrudOperations(orderRepo);
+        await CallOrderItemCrudOperations(orderItemRepo);
+        await CallMenuItemCrudOperations(menuItemRepo);
+        await ListManagers(employeeRepo);
+        await GetReservationsByCustomer(reservationRepo);
+        await ListOrdersAndMenuItems(orderRepo);
+        await ListOrderedMenuItems(menuItemRepo);
+        await CalculateAverageOrderAmount(employeeRepo);
+        await QueryReservationDetailsView(context);
+        await QueryEmployeeWithRestaurantDetailsView(context);
+    }
 
     private static async Task CallCustomerCrudOperations(ICustomerRepository customerRepository)
     {
@@ -224,53 +272,5 @@ static class Program
     {
         var reservationDetails = await context.EmployeeWithRestaurantDetails.ToListAsync();
         reservationDetails.ForEach(Console.WriteLine);
-    }
-    
-    static async Task Main()
-    {
-        using IHost host = Host.CreateDefaultBuilder()
-            .ConfigureServices((_, services) =>
-            {
-                services.AddDbContext<RestaurantReservationDbContext>();
-                services.AddScoped<ICustomerRepository, CustomerRepository>();
-                services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-                services.AddScoped<IReservationRepository, ReservationRepository>();
-                services.AddScoped<IOrderRepository, OrderRepository>();
-                services.AddScoped<IOrderItemRepository, OrderItemRepository>();
-                services.AddScoped<IMenuItemRepository, MenuItemRepository>();
-                services.AddScoped<IRestaurantRepository, RestaurantRepository>();
-                services.AddScoped<ITableRepository, TableRepository>();
-            })
-            .Build();
-        
-        using var scope = host.Services.CreateScope();
-        var services = scope.ServiceProvider;
-        
-        var context = services.GetRequiredService<RestaurantReservationDbContext>();
-        
-        var customerRepo = services.GetRequiredService<ICustomerRepository>();
-        var employeeRepo = services.GetRequiredService<IEmployeeRepository>();
-        var orderRepo = services.GetRequiredService<IOrderRepository>();
-        var orderItemRepo = services.GetRequiredService<IOrderItemRepository>();
-        var restaurantRepo = services.GetRequiredService<IRestaurantRepository>();
-        var reservationRepo = services.GetRequiredService<IReservationRepository>();
-        var menuItemRepo = services.GetRequiredService<IMenuItemRepository>();
-        var tableRepository = services.GetRequiredService<ITableRepository>();
-        
-        await CallCustomerCrudOperations(customerRepo);
-        await CallEmployeeCrudOperations(employeeRepo);
-        await CallRestaurantCrudOperations(restaurantRepo);
-        await CallReservationCrudOperations(reservationRepo);
-        await CallTableCrudOperations(tableRepository);
-        await CallOrderCrudOperations(orderRepo);
-        await CallOrderItemCrudOperations(orderItemRepo);
-        await CallMenuItemCrudOperations(menuItemRepo);
-        await ListManagers(employeeRepo);
-        await GetReservationsByCustomer(reservationRepo);
-        await ListOrdersAndMenuItems(orderRepo);
-        await ListOrderedMenuItems(menuItemRepo);
-        await CalculateAverageOrderAmount(employeeRepo);
-        await QueryReservationDetailsView(context);
-        await QueryEmployeeWithRestaurantDetailsView(context);
     }
 }

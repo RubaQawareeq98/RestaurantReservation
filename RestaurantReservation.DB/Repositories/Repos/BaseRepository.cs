@@ -43,7 +43,7 @@ public class BaseRepository<T>(RestaurantReservationDbContext context) : IBaseRe
         await context.SaveChangesAsync();
     }
 
-    public async Task<List<T>> GetAllAsync()
+    public virtual async Task<List<T>> GetAllAsync()
     {
         var data = await _entitySet.ToListAsync();
         return data;

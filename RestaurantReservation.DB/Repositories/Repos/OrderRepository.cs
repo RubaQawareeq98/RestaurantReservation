@@ -24,4 +24,11 @@ public class OrderRepository(RestaurantReservationDbContext context) : BaseRepos
             .ThenInclude(oi => oi.MenuItem)
             .ToListAsync();
     }
+
+    public override async Task<List<Order>> GetAllAsync()
+    {
+        return await _context.Orders
+                    .Include(o => o.PaymentDetail)
+                    .ToListAsync();
+    }
 }

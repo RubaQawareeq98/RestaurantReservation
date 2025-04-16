@@ -10,7 +10,7 @@ namespace RestaurantReservation.DB.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(@"CREATE VIEW EmployeeWithRestaurantDetails AS
+            migrationBuilder.Sql(@"CREATE VIEW EmployeeWithRestaurantDetailsViews AS
                                     SELECT 
                                         e.Id AS EmployeeId,
                                         e.FirstName,
@@ -30,7 +30,7 @@ namespace RestaurantReservation.DB.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(@"DROP VIEW EmployeeWithRestaurantDetails");
+            migrationBuilder.Sql(@"DROP VIEW EmployeeWithRestaurantDetailsViews");
         }
     }
 }

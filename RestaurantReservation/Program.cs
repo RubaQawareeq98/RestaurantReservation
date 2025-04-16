@@ -191,6 +191,17 @@ static class Program
             }
         }
     }
+
+    private static async Task ListOrderedMenuItems(int reservationId)
+    {
+        IMenuItemRepository menuItemRepository = new MenuItemRepository(_context);
+        var menuItems = await menuItemRepository.ListOrderedMenuItems(reservationId);
+        if (menuItems.Count == 0)
+        {
+            Console.WriteLine("There are no ordered items");
+        }
+        menuItems.ForEach(Console.WriteLine);
+    }
     
     static async Task Main()
     {
@@ -205,6 +216,7 @@ static class Program
         // await ListManagers();
         // await GetReservationsByCustomer();
 
-        await ListOrdersAndMenuItems(1);
+        //await ListOrdersAndMenuItems(1);
+        await ListOrderedMenuItems(4);
     }
 }

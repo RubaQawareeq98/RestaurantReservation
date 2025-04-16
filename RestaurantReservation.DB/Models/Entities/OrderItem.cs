@@ -18,6 +18,9 @@ public class OrderItem : IEntity
 
     public override string ToString()
     {
-        return $"Id: {Id}, Quantity: {Quantity}, OrderId: {OrderId}, MenuItem {MenuItem}";
+        return $"""
+                Id: {Id}, Quantity: {Quantity}, OrderId: {OrderId},
+                MenuItem {MenuItem}
+                """;
     }
 }

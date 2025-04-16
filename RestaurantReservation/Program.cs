@@ -9,7 +9,7 @@ static class Program
 {
     private static RestaurantReservationDbContext _context = new RestaurantReservationDbContext();
 
-    private static async Task TestCustomerCrudOperations()
+    private static async Task CallCustomerCrudOperations()
     {
         ICustomerRepository customerRepository = new CustomerRepository( _context );
         var customer = new Customer { FirstName = "Eman", LastName = "Ahmad", Email = "emanahmad@gmail.com", PhoneNumber = "123456789" };
@@ -25,7 +25,7 @@ static class Program
         customers.ForEach(Console.WriteLine);
     }
     
-    private static async Task TestEmployeeCrudOperations()
+    private static async Task CallEmployeeCrudOperations()
     {
         IEmployeeRepository employeeRepository = new EmployeeRepository(_context);
         
@@ -42,7 +42,7 @@ static class Program
         employees.ForEach(Console.WriteLine);
     }
  
-    private static async Task TestRestaurantCrudOperations()
+    private static async Task CallRestaurantCrudOperations()
     {
         IRestaurantRepository restaurantRepository = new RestaurantRepository(_context);
         
@@ -59,7 +59,7 @@ static class Program
         restaurants.ForEach(Console.WriteLine);
     }
  
-    private static async Task TestReservationCrudOperations()
+    private static async Task CallReservationCrudOperations()
     {
         IReservationRepository reservationRepository = new ReservationRepository(_context);
         
@@ -76,7 +76,7 @@ static class Program
         restaurants.ForEach(Console.WriteLine);
     }
 
-    private static async Task TestTableCrudOperations()
+    private static async Task CallTableCrudOperations()
     {
         ITableRepository tableRepository = new TableRepository(_context);
 
@@ -93,7 +93,7 @@ static class Program
         restaurants.ForEach(Console.WriteLine);
     }
 
-    private static async Task TestOrderCrudOperations()
+    private static async Task CallOrderCrudOperations()
     {
         IOrderRepository orderRepository = new OrderRepository(_context);
 
@@ -114,7 +114,7 @@ static class Program
         restaurants.ForEach(Console.WriteLine);
     }
 
-    private static async Task TestOrderItemCrudOperations()
+    private static async Task CallOrderItemCrudOperations()
     {
         IOrderItemRepository orderItemRepository = new OrderItemRepository(_context);
 
@@ -131,7 +131,7 @@ static class Program
         restaurants.ForEach(Console.WriteLine);
     }
 
-    private static async Task TestMenuItemCrudOperations()
+    private static async Task CallMenuItemCrudOperations()
     {
         IMenuItemRepository menuItemRepository = new MenuItemRepository(_context);
 
@@ -177,18 +177,34 @@ static class Program
         }
         reservations.ForEach(Console.WriteLine);
     }
+
+    private static async Task ListOrdersAndMenuItems(int reservationId)
+    {
+        IOrderRepository orderRepository = new OrderRepository(_context);
+        var orders = await orderRepository.ListOrdersAndMenuItems(reservationId);
+        foreach (var order in orders)
+        {
+            Console.WriteLine(order);
+            foreach (var orderItem in order.OrderItems)
+            {
+                Console.WriteLine(orderItem);
+            }
+        }
+    }
     
     static async Task Main()
     {
-        //await TestCustomerCrudOperations();
-        //await TestEmployeeCrudOperations();
-        //await TestRestaurantCrudOperations();
-        //await TestReservationCrudOperations();
-        //await TestTableCrudOperations();
-        //await TestOrderCrudOperations();
-        // await TestOrderItemCrudOperations();
-        // await TestMenuItemCrudOperations();
-        //await ListManagers();
-        await GetReservationsByCustomer();
+        // await CallCustomerCrudOperations();
+        // await CallEmployeeCrudOperations();
+        // await CallRestaurantCrudOperations();
+        // await CallReservationCrudOperations();
+        // await CallTableCrudOperations();
+        // await CallOrderCrudOperations();
+        // await CallOrderItemCrudOperations();
+        // await CallMenuItemCrudOperations();
+        // await ListManagers();
+        // await GetReservationsByCustomer();
+
+        await ListOrdersAndMenuItems(1);
     }
 }

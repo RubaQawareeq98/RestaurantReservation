@@ -22,6 +22,6 @@ public class Order : IEntity
 
     public override string ToString()
     {
-        return $"Order Id: {Id}, OrderDate: {OrderDate}, ReservationId: {ReservationId}, EmployeeId: {EmployeeId}, PaymentDetail: {PaymentDetail}";
+        return $"Order Id: {Id}, OrderDate: {OrderDate}, EmployeeId: {EmployeeId}, PaymentDetail: {PaymentDetail}";
     }
 }

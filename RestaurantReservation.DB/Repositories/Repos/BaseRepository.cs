@@ -17,26 +17,26 @@ public class BaseRepository<T>(RestaurantReservationDbContext context) : IBaseRe
         await context.SaveChangesAsync();
     }
 
-    public virtual async Task DeleteAsync(T entity)
+    public virtual async Task DeleteAsync(T? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
         var isExist = await IsEntityExist(entity.Id);
         if (!isExist)
         {
-            throw new NoRecordFoundException();
+            throw new RecordNotFoundException();
         }
         _entitySet.Remove(entity);
         await context.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(T entity)
+    public async Task UpdateAsync(T? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
         
         var isExist = await IsEntityExist(entity.Id);
         if (!isExist)
         {
-            throw new NoRecordFoundException();
+            throw new RecordNotFoundException();
         }
         
         _entitySet.Update(entity);

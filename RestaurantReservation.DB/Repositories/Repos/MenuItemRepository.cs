@@ -15,7 +15,7 @@ public class MenuItemRepository(RestaurantReservationDbContext context)
         var isExist = await IsEntityExist(reservationId);
         if (!isExist)
         {
-            throw new NoRecordFoundException();
+            throw new RecordNotFoundException();
         }
         
         return await _context.OrderItems

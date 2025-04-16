@@ -1,4 +1,5 @@
-﻿using RestaurantReservation.DB;
+﻿using Microsoft.EntityFrameworkCore;
+using RestaurantReservation.DB;
 using RestaurantReservation.DB.Models.Entities;
 using RestaurantReservation.DB.Repositories.Interfaces;
 using RestaurantReservation.DB.Repositories.Repos;
@@ -209,6 +210,12 @@ static class Program
         var averageOrderAmount = await employeeRepository.CalculateAverageOrderAmount(employeeId);
         Console.WriteLine($"Average order amount: {averageOrderAmount}");
     }
+
+    private static async Task QueryReservatioDetailsView()
+    {
+        var reservationDetails = await _context.ReservationDetails.ToListAsync();
+        reservationDetails.ForEach(Console.WriteLine);
+    }
     
     static async Task Main()
     {
@@ -225,6 +232,7 @@ static class Program
 
         //await ListOrdersAndMenuItems(1);
         //await ListOrderedMenuItems(4);
-        await CalculateAverageOrderAmount(4);
+        //await CalculateAverageOrderAmount(4);
+        await QueryReservatioDetailsView();
     }
 }

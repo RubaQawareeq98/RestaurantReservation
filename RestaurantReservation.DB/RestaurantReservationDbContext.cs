@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using RestaurantReservation.DB.Configurations;
-using RestaurantReservation.DB.Models;
 using RestaurantReservation.DB.Models.Entities;
 using RestaurantReservation.DB.Seeds;
 using RestaurantReservation.DB.Views;
@@ -38,7 +37,9 @@ public class RestaurantReservationDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlServer(
-                "Data Source = lenovo\\SQLEXPRESS01; Initial Catalog = RestaurantReservationCore; Integrated Security = True; Encrypt = false");
+                "Data Source = lenovo\\SQLEXPRESS01; Initial Catalog = RestaurantReservationCore; Integrated Security = True; Encrypt = false")
+            .LogTo(Console.WriteLine)
+            .EnableSensitiveDataLogging();
     }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -66,5 +67,7 @@ public class RestaurantReservationDbContext : DbContext
 
     [DbFunction("fn_CalculateTotalRevenue", "dbo")]
     public static decimal CalculateTotalRevenue(int restaurantId)
-        => throw new NotImplementedException();
+    {
+        throw new NotImplementedException();
+    }
 }

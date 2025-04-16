@@ -127,14 +127,32 @@ static class Program
         restaurants.ForEach(Console.WriteLine);
     }
 
+    private static async Task TestMenuItemCrudOperations()
+    {
+        IMenuItemRepository menuItemRepository = new MenuItemRepository(_context);
+
+        var menuItem = new MenuItem { RestaurantId = 4, Description = "New Item", Name = "Item7", Price = 108 };
+        await menuItemRepository.AddAsync(menuItem);
+
+        menuItem.Price = 122;
+        await menuItemRepository.UpdateAsync(menuItem);
+
+        var restaurants = await menuItemRepository.GetAllAsync();
+        var deletedOrderItem = restaurants.FirstOrDefault();
+        await menuItemRepository.DeleteAsync(deletedOrderItem);
+        
+        restaurants.ForEach(Console.WriteLine);
+    }
+
     static async Task Main()
     {
         //await TestCustomerCrudOperations();
         //await TestEmployeeCrudOperations();
-        await TestRestaurantCrudOperations();
-        await TestReservationCrudOperations();
-        await TestTableCrudOperations();
+        //await TestRestaurantCrudOperations();
+        //await TestReservationCrudOperations();
+        //await TestTableCrudOperations();
         await TestOrderCrudOperations();
         await TestOrderItemCrudOperations();
+        await TestMenuItemCrudOperations();
     }
 }

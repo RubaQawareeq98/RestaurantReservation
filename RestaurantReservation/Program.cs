@@ -97,12 +97,16 @@ static class Program
     {
         IOrderRepository orderRepository = new OrderRepository(_context);
 
-        var order = new Order { ReservationId = 4, OrderDate = DateTime.Now, EmployeeId = 2};
+        var order = new Order
+        {
+            ReservationId = 4, OrderDate = DateTime.Now, EmployeeId = 2,
+            PaymentDetail = new PaymentDetail { PaymentDate = DateTime.Now, PaymentMethod = PaymentMethod.CreditCard, PaymentNumber = 7, Amount = 11 }
+        };
         await orderRepository.AddAsync(order);
 
         order.EmployeeId = 4;
         await orderRepository.UpdateAsync(order);
-
+        
         var restaurants = await orderRepository.GetAllAsync();
         var deletedOrder = restaurants.FirstOrDefault();
         await orderRepository.DeleteAsync(deletedOrder);
@@ -152,7 +156,7 @@ static class Program
         //await TestReservationCrudOperations();
         //await TestTableCrudOperations();
         await TestOrderCrudOperations();
-        await TestOrderItemCrudOperations();
-        await TestMenuItemCrudOperations();
+        // await TestOrderItemCrudOperations();
+        // await TestMenuItemCrudOperations();
     }
 }

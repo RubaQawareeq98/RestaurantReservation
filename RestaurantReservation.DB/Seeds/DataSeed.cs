@@ -1,4 +1,3 @@
-using RestaurantReservation.DB.Models;
 using RestaurantReservation.DB.Models.Entities;
 
 namespace RestaurantReservation.DB.Seeds;
@@ -47,9 +46,9 @@ public static class DataSeed
         [
             new Position { Id = 1, Name = "Manager" },
             new Position { Id = 2, Name = "Waiter" },
-            new Position { Id = 3, Name = "Manager" },
+            new Position { Id = 3, Name = "Cashier" },
             new Position { Id = 4, Name = "Chef" },
-            new Position { Id = 5, Name = "Accounter" }
+            new Position { Id = 5, Name = "Dishwasher" }
         ];
     }
 

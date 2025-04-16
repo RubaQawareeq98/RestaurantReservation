@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using RestaurantReservation.DB.Models;
+using RestaurantReservation.DB.Models.Entities;
 
 namespace RestaurantReservation.DB.Seeds;
 

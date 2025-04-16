@@ -9,8 +9,10 @@ public class CustomerRepository (RestaurantReservationDbContext context) : BaseR
 {
     private readonly RestaurantReservationDbContext _context = context;
 
-    public override async Task DeleteAsync(Customer entity)
+    public override async Task DeleteAsync(Customer? entity)
     {
+        ArgumentNullException.ThrowIfNull(entity);
+        
         var isExist = await IsEntityExist(entity.Id);
         if (!isExist)
         {

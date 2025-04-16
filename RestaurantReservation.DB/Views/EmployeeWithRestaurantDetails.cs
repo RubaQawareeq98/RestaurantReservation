@@ -1,3 +1,5 @@
+using RestaurantReservation.DB.Models.Entities;
+
 namespace RestaurantReservation.DB.Views;
 
 public class EmployeeWithRestaurantDetails
@@ -11,5 +13,14 @@ public class EmployeeWithRestaurantDetails
     public string? RestaurantAddress { get; set; }
     public string? RestaurantPhoneNumber { get; set; }
     public string Position { get; set; }
-   
+
+    public override string ToString()
+    {
+        return $"""
+                EmployeeId: {EmployeeId}", FirstName : {FirstName}, LastName {LastName}, Position: {Position}
+                RestaurantId: {RestaurantId}, RestaurantName: {RestaurantName}, RestaurantAddress: {RestaurantAddress}
+                RestaurantPhoneNumber: {RestaurantPhoneNumber}
+                ------------------------------------------------------------------------------
+                """;
+    }
 }

@@ -211,9 +211,15 @@ static class Program
         Console.WriteLine($"Average order amount: {averageOrderAmount}");
     }
 
-    private static async Task QueryReservatioDetailsView()
+    private static async Task QueryReservationDetailsView()
     {
         var reservationDetails = await _context.ReservationDetails.ToListAsync();
+        reservationDetails.ForEach(Console.WriteLine);
+    }
+    
+    private static async Task QueryEmployeeWithRestaurantDetailsView()
+    {
+        var reservationDetails = await _context.EmployeeWithRestaurantDetails.ToListAsync();
         reservationDetails.ForEach(Console.WriteLine);
     }
     
@@ -233,6 +239,7 @@ static class Program
         //await ListOrdersAndMenuItems(1);
         //await ListOrderedMenuItems(4);
         //await CalculateAverageOrderAmount(4);
-        await QueryReservatioDetailsView();
+        //await QueryReservationDetailsView();
+        await QueryEmployeeWithRestaurantDetailsView();
     }
 }

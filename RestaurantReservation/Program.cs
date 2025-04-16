@@ -58,11 +58,47 @@ static class Program
         
         restaurants.ForEach(Console.WriteLine);
     }
+ 
+    private static async Task TestReservationCrudOperations()
+    {
+        IReservationRepository reservationRepository = new ReservationRepository(_context);
+        
+        var reservation = new Reservation { CustomerId = 2, RestaurantId = 3, TableId = 1, PartySize = 5, ReservationDate = DateTime.Now };
+        await reservationRepository.AddAsync(reservation);
+
+        reservation.PartySize = 7;
+        await reservationRepository.UpdateAsync(reservation);
+
+        var restaurants = await reservationRepository.GetAllAsync();
+        var deletedRestaurant = restaurants.FirstOrDefault();
+        await reservationRepository.DeleteAsync(deletedRestaurant);
+        
+        restaurants.ForEach(Console.WriteLine);
+    }
+
+    private static async Task TestTableCrudOperations()
+    {
+        ITableRepository tableRepository = new TableRepository(_context);
+
+        var table = new Table { RestaurantId = 4, Capacity = 5};
+        await tableRepository.AddAsync(table);
+
+        table.Capacity = 9;
+        await tableRepository.UpdateAsync(table);
+
+        var restaurants = await tableRepository.GetAllAsync();
+        var deletedRestaurant = restaurants.FirstOrDefault();
+        await tableRepository.DeleteAsync(deletedRestaurant);
+        
+        restaurants.ForEach(Console.WriteLine);
+    }
 
     static async Task Main()
     {
         //await TestCustomerCrudOperations();
         //await TestEmployeeCrudOperations();
         await TestRestaurantCrudOperations();
+        await TestReservationCrudOperations();
+        await TestTableCrudOperations();
     }
 }

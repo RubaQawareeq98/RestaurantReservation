@@ -10,4 +10,6 @@ public class EmployeeWithRestaurantDetails
     public string? RestaurantName { get; set; }
     public string? RestaurantAddress { get; set; }
     public string? RestaurantPhoneNumber { get; set; }
+    public string Position { get; set; }
+   
 }

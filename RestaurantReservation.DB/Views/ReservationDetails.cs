@@ -14,4 +14,10 @@ public class ReservationDetails
     public int RestaurantId { get; set; }
     public string? RestaurantName { get; set; }
     public string? RestaurantAddress { get; set; }
+    public string OpenHours { get; set; }
+
+    public override string ToString()
+    {
+        return $"ReservationId: {ReservationId}, ReservationDate: {ReservationDate}, PartySize: {PartySize} OpenHours: {OpenHours}";
+    }
 }

@@ -27,9 +27,9 @@ namespace RestaurantReservation.DB.Migrations
 			                            CONCAT(o.DayOfWeek, o.OpenHour, ' - ', o.CloseHour) as OpenHour
 			                            
                                     FROM Reservations r
-                                    LEFT JOIN Customers c ON r.CustomerId = c.Id
-                                    LEFT JOIN Restaurants res ON r.RestaurantId = res.Id
-		                            LEFT JOIN OpeningHours o ON r.Id = o.RestaurantId
+                                    JOIN Customers c ON r.CustomerId = c.Id
+                                    JOIN Restaurants res ON r.RestaurantId = res.Id
+		                            JOIN OpeningHours o ON r.Id = o.RestaurantId
                             ");
 
         }

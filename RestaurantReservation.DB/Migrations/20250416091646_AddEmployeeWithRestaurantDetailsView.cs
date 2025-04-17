@@ -22,8 +22,8 @@ namespace RestaurantReservation.DB.Migrations
                                         r.PhoneNumber AS RestaurantPhoneNumber,
 	                                    p.name as Position
                                     FROM Employees e
-                                    LEFT JOIN Restaurants r ON e.RestaurantId = r.Id
-                                    Left JOIN Positions p ON e.PositionId = p.Id
+                                    JOIN Restaurants r ON e.RestaurantId = r.Id
+                                    JOIN Positions p ON e.PositionId = p.Id
                                     ");
         }
 

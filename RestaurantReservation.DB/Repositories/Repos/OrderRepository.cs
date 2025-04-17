@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using RestaurantReservation.DB.Exceptions;
 using RestaurantReservation.DB.Models.Entities;
 using RestaurantReservation.DB.Repositories.Interfaces;
 
@@ -11,11 +10,7 @@ public class OrderRepository(RestaurantReservationDbContext context) : BaseRepos
 
     public async Task<List<Order>> ListOrdersAndMenuItems(int reservationId)
     {
-        var isExist = await IsEntityExist(reservationId);
-        if (!isExist)
-        {
-            throw new RecordNotFoundException($"Reservation with id {reservationId} not found");
-        }
+        await EnsureEntityExist(reservationId);
 
         return await _context.Orders
             .Where(o => o.ReservationId == reservationId)

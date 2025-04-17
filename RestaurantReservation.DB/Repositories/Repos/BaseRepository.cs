@@ -21,25 +21,16 @@ public class BaseRepository<T>(RestaurantReservationDbContext context) : IBaseRe
     {
         ArgumentNullException.ThrowIfNull(entity);
         
-        await EnsureEntityExist(entity);
+        await EnsureEntityExist(entity.Id);
         _entitySet.Remove(entity);
         await context.SaveChangesAsync();
     }
-
-    private async Task EnsureEntityExist(T entity)
-    {
-        var isExist = await IsEntityExist(entity.Id);
-        if (!isExist)
-        {
-            throw new RecordNotFoundException($"{typeof(T)} with id: {entity.Id} not found");
-        }
-    }
-
+    
     public async Task UpdateAsync(T? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
-        await EnsureEntityExist(entity);
+        await EnsureEntityExist(entity.Id);
         
         _entitySet.Update(entity);
         await context.SaveChangesAsync();
@@ -51,8 +42,12 @@ public class BaseRepository<T>(RestaurantReservationDbContext context) : IBaseRe
         return data;
     }
 
-    public async Task<bool> IsEntityExist(int id)
+    public async Task EnsureEntityExist(int id)
     {
-        return await _entitySet.AnyAsync(e => e.Id == id);
+        var isExist = await _entitySet.AnyAsync(e => e.Id == id);
+        if (!isExist)
+        {
+            throw new RecordNotFoundException($"{typeof(T)} with id: {id} not found");
+        }
     }
 }

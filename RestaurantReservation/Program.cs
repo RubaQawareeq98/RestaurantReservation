@@ -29,22 +29,30 @@ static class Program
         var reservationRepo = services.GetRequiredService<IReservationRepository>();
         var menuItemRepo = services.GetRequiredService<IMenuItemRepository>();
         var tableRepository = services.GetRequiredService<ITableRepository>();
+
+        try
+        {
+            await CallCustomerCrudOperations(customerRepo);
+            await CallEmployeeCrudOperations(employeeRepo);
+            await CallRestaurantCrudOperations(restaurantRepo);
+            await CallReservationCrudOperations(reservationRepo);
+            await CallTableCrudOperations(tableRepository);
+            await CallOrderCrudOperations(orderRepo);
+            await CallOrderItemCrudOperations(orderItemRepo);
+            await CallMenuItemCrudOperations(menuItemRepo);
+            await ListManagers(employeeRepo);
+            await GetReservationsByCustomer(reservationRepo);
+            await ListOrdersAndMenuItems(orderRepo);
+            await ListOrderedMenuItems(menuItemRepo);
+            await CalculateAverageOrderAmount(employeeRepo);
+            await QueryReservationDetailsView(context);
+            await QueryEmployeeWithRestaurantDetailsView(context);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error: {e.Message}");
+        }
         
-        await CallCustomerCrudOperations(customerRepo);
-        await CallEmployeeCrudOperations(employeeRepo);
-        await CallRestaurantCrudOperations(restaurantRepo);
-        await CallReservationCrudOperations(reservationRepo);
-        await CallTableCrudOperations(tableRepository);
-        await CallOrderCrudOperations(orderRepo);
-        await CallOrderItemCrudOperations(orderItemRepo);
-        await CallMenuItemCrudOperations(menuItemRepo);
-        await ListManagers(employeeRepo);
-        await GetReservationsByCustomer(reservationRepo);
-        await ListOrdersAndMenuItems(orderRepo);
-        await ListOrderedMenuItems(menuItemRepo);
-        await CalculateAverageOrderAmount(employeeRepo);
-        await QueryReservationDetailsView(context);
-        await QueryEmployeeWithRestaurantDetailsView(context);
 }
 
     private static async Task CallCustomerCrudOperations(ICustomerRepository customerRepository)

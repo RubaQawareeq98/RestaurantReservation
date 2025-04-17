@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RestaurantReservation.Configurations;
 using RestaurantReservation.DB;
 using RestaurantReservation.DB.Models.Entities;
 using RestaurantReservation.DB.Repositories.Interfaces;
-using RestaurantReservation.DB.Repositories.Repos;
 
 namespace RestaurantReservation;
 
@@ -12,23 +12,15 @@ static class Program
 {
     private const string Message = "Please enter a valid integer";
     
-        static async Task Main()
+    static async Task Main()
     {
-        using IHost host = Host.CreateDefaultBuilder()
+        var host = Host.CreateDefaultBuilder()
             .ConfigureServices((_, services) =>
             {
-                services.AddDbContext<RestaurantReservationDbContext>();
-                services.AddScoped<ICustomerRepository, CustomerRepository>();
-                services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-                services.AddScoped<IReservationRepository, ReservationRepository>();
-                services.AddScoped<IOrderRepository, OrderRepository>();
-                services.AddScoped<IOrderItemRepository, OrderItemRepository>();
-                services.AddScoped<IMenuItemRepository, MenuItemRepository>();
-                services.AddScoped<IRestaurantRepository, RestaurantRepository>();
-                services.AddScoped<ITableRepository, TableRepository>();
+                services.RegisterServices();
             })
             .Build();
-        
+
         using var scope = host.Services.CreateScope();
         var services = scope.ServiceProvider;
         
@@ -43,26 +35,26 @@ static class Program
         var menuItemRepo = services.GetRequiredService<IMenuItemRepository>();
         var tableRepository = services.GetRequiredService<ITableRepository>();
         
-        await CallCustomerCrudOperations(customerRepo);
-        await CallEmployeeCrudOperations(employeeRepo);
-        await CallRestaurantCrudOperations(restaurantRepo);
-        await CallReservationCrudOperations(reservationRepo);
-        await CallTableCrudOperations(tableRepository);
-        await CallOrderCrudOperations(orderRepo);
-        await CallOrderItemCrudOperations(orderItemRepo);
-        await CallMenuItemCrudOperations(menuItemRepo);
-        await ListManagers(employeeRepo);
-        await GetReservationsByCustomer(reservationRepo);
-        await ListOrdersAndMenuItems(orderRepo);
-        await ListOrderedMenuItems(menuItemRepo);
-        await CalculateAverageOrderAmount(employeeRepo);
+        // await CallCustomerCrudOperations(customerRepo);
+        // await CallEmployeeCrudOperations(employeeRepo);
+        // await CallRestaurantCrudOperations(restaurantRepo);
+        // await CallReservationCrudOperations(reservationRepo);
+        // await CallTableCrudOperations(tableRepository);
+        // await CallOrderCrudOperations(orderRepo);
+        // await CallOrderItemCrudOperations(orderItemRepo);
+        // await CallMenuItemCrudOperations(menuItemRepo);
+        // await ListManagers(employeeRepo);
+        // await GetReservationsByCustomer(reservationRepo);
+        // await ListOrdersAndMenuItems(orderRepo);
+        // await ListOrderedMenuItems(menuItemRepo);
+        // await CalculateAverageOrderAmount(employeeRepo);
         await QueryReservationDetailsView(context);
         await QueryEmployeeWithRestaurantDetailsView(context);
-    }
+}
 
     private static async Task CallCustomerCrudOperations(ICustomerRepository customerRepository)
     {
-        var customer = new Customer { FirstName = "Eman", LastName = "Ahmad", Email = "emanahmad@gmail.com", PhoneNumber = "123456789" };
+        var customer = new Customer { FirstName = "Ruba", LastName = "Qawareeq", Email = "ruba@gmail.com", PhoneNumber = "123456789" };
         await customerRepository.AddAsync(customer);
         
         customer.PhoneNumber = "059789456";

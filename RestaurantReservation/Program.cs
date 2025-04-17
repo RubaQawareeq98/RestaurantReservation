@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RestaurantReservation.Configurations;
 using RestaurantReservation.DB;
 using RestaurantReservation.DB.Models.Entities;
+using RestaurantReservation.DB.Models.Enums;
 using RestaurantReservation.DB.Repositories.Interfaces;
 
 namespace RestaurantReservation;
@@ -15,22 +15,9 @@ static class Program
     
     static async Task Main()
     {
-        var host = Host.CreateDefaultBuilder()
-            .ConfigureAppConfiguration((_, config) =>
-            {
-                config.AddJsonFile("./appsettings.json");
-            })
-            .ConfigureServices((context, services) =>
-            {
-                var connectionString = context.Configuration.GetConnectionString("DefaultConnection");
-                services.AddDbContext<RestaurantReservationDbContext>(options => options.UseSqlServer(connectionString));
-                
-                services.RegisterServices();
-            })
-            .Build();
+        var host = Host.CreateDefaultBuilder();
 
-        using var scope = host.Services.CreateScope();
-        var services = scope.ServiceProvider;
+        var services = host.Configure();
         
         var context = services.GetRequiredService<RestaurantReservationDbContext>();
         
@@ -43,19 +30,19 @@ static class Program
         var menuItemRepo = services.GetRequiredService<IMenuItemRepository>();
         var tableRepository = services.GetRequiredService<ITableRepository>();
         
-        // await CallCustomerCrudOperations(customerRepo);
-        // await CallEmployeeCrudOperations(employeeRepo);
-        // await CallRestaurantCrudOperations(restaurantRepo);
-        // await CallReservationCrudOperations(reservationRepo);
-        // await CallTableCrudOperations(tableRepository);
-        // await CallOrderCrudOperations(orderRepo);
-        // await CallOrderItemCrudOperations(orderItemRepo);
-        // await CallMenuItemCrudOperations(menuItemRepo);
-        // await ListManagers(employeeRepo);
-        // await GetReservationsByCustomer(reservationRepo);
-        // await ListOrdersAndMenuItems(orderRepo);
-        // await ListOrderedMenuItems(menuItemRepo);
-        // await CalculateAverageOrderAmount(employeeRepo);
+        await CallCustomerCrudOperations(customerRepo);
+        await CallEmployeeCrudOperations(employeeRepo);
+        await CallRestaurantCrudOperations(restaurantRepo);
+        await CallReservationCrudOperations(reservationRepo);
+        await CallTableCrudOperations(tableRepository);
+        await CallOrderCrudOperations(orderRepo);
+        await CallOrderItemCrudOperations(orderItemRepo);
+        await CallMenuItemCrudOperations(menuItemRepo);
+        await ListManagers(employeeRepo);
+        await GetReservationsByCustomer(reservationRepo);
+        await ListOrdersAndMenuItems(orderRepo);
+        await ListOrderedMenuItems(menuItemRepo);
+        await CalculateAverageOrderAmount(employeeRepo);
         await QueryReservationDetailsView(context);
         await QueryEmployeeWithRestaurantDetailsView(context);
 }
@@ -77,14 +64,14 @@ static class Program
     
     private static async Task CallEmployeeCrudOperations(IEmployeeRepository employeeRepository)
     {
-        var employee = new Employee { FirstName = "Eman", LastName = "Ahmad", PositionId = 2, RestaurantId = 3};
+        var employee = new Employee { FirstName = "Eman", LastName = "Ahmad", Position = Position.Chef, RestaurantId = 3};
         await employeeRepository.AddAsync(employee);
 
         employee.RestaurantId = 2;
         await employeeRepository.UpdateAsync(employee);
 
         var employees = await employeeRepository.GetAllAsync();
-        var deletedEmployee = employees.FirstOrDefault();
+        var deletedEmployee = employees.LastOrDefault();
         await employeeRepository.DeleteAsync(deletedEmployee);
         
         employees.ForEach(Console.WriteLine);
@@ -251,7 +238,7 @@ static class Program
 
     private static async Task CalculateAverageOrderAmount(IEmployeeRepository employeeRepository)
     {
-        Console.WriteLine("Getting Enter the Employee ID");
+        Console.WriteLine("Getting Enter the Employee Id");
         var isValid = int.TryParse(Console.ReadLine(), out var employeeId);
         if (!isValid)
         {

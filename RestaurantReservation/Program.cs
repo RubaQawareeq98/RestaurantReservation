@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RestaurantReservation.Configurations;
@@ -15,8 +16,15 @@ static class Program
     static async Task Main()
     {
         var host = Host.CreateDefaultBuilder()
-            .ConfigureServices((_, services) =>
+            .ConfigureAppConfiguration((_, config) =>
             {
+                config.AddJsonFile("./appsettings.json");
+            })
+            .ConfigureServices((context, services) =>
+            {
+                var connectionString = context.Configuration.GetConnectionString("DefaultConnection");
+                services.AddDbContext<RestaurantReservationDbContext>(options => options.UseSqlServer(connectionString));
+                
                 services.RegisterServices();
             })
             .Build();

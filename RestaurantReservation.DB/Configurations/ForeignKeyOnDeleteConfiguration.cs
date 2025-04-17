@@ -63,12 +63,6 @@ public static class ForeignKeyOnDeleteConfiguration
              .OnDelete(DeleteBehavior.SetNull);
          
          modelBuilder.Entity<Employee>()
-             .HasOne(e => e.Position)
-             .WithMany(p => p.Employees)
-             .HasForeignKey(e => e.PositionId)
-             .OnDelete(DeleteBehavior.Restrict);
-         
-         modelBuilder.Entity<Employee>()
              .HasOne(e => e.Restaurant)
              .WithMany(r => r.Employees)
              .HasForeignKey(e => e.RestaurantId)

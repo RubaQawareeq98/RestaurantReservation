@@ -16,13 +16,11 @@ public static class EntitiesSeed
         var customers = DataSeed.SeedCustomers();
         var employees = DataSeed.SeedEmployees();
         var reservations = DataSeed.SeedReservations();
-        var positions = DataSeed.SeedPositions();
         var openingHours = DataSeed.SeedOpeningHours();
         
         modelBuilder.Entity<Customer>().HasData(customers);
         modelBuilder.Entity<Restaurant>().HasData(restaurants);
         modelBuilder.Entity<Table>().HasData(tables);
-        modelBuilder.Entity<Position>().HasData(positions);
         modelBuilder.Entity<OpeningHour>().HasData(openingHours);
         modelBuilder.Entity<Employee>().HasData(employees);
         modelBuilder.Entity<Reservation>().HasData(reservations);

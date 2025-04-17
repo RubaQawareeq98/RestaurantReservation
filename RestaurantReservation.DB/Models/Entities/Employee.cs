@@ -1,3 +1,4 @@
+using RestaurantReservation.DB.Models.Enums;
 using RestaurantReservation.DB.Models.Interfaces;
 
 namespace RestaurantReservation.DB.Models.Entities;
@@ -9,8 +10,6 @@ public class Employee : IEntity
     public required string FirstName { get; set; }
     
     public required string LastName { get; set; }
-    
-    public int PositionId { get; set; }
     
     public Position Position { get; set; }
     

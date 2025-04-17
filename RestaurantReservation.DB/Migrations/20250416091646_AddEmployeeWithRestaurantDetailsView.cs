@@ -15,15 +15,13 @@ namespace RestaurantReservation.DB.Migrations
                                         e.Id AS EmployeeId,
                                         e.FirstName,
                                         e.LastName,
-                                        e.PositionId,
+                                        e.Position,
                                         e.RestaurantId,
                                         r.Name AS RestaurantName,
                                         r.Address AS RestaurantAddress,
-                                        r.PhoneNumber AS RestaurantPhoneNumber,
-	                                    p.name as Position
+                                        r.PhoneNumber AS RestaurantPhoneNumber
                                     FROM Employees e
                                     JOIN Restaurants r ON e.RestaurantId = r.Id
-                                    JOIN Positions p ON e.PositionId = p.Id
                                     ");
         }
 

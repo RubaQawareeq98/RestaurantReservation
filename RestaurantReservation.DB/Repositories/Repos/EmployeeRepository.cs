@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using RestaurantReservation.DB.Models.Entities;
+using RestaurantReservation.DB.Models.Enums;
 using RestaurantReservation.DB.Repositories.Interfaces;
 
 namespace RestaurantReservation.DB.Repositories.Repos;
@@ -12,7 +13,7 @@ public class EmployeeRepository (RestaurantReservationDbContext context) : BaseR
     {
         return 
             await _context.Employees
-                .Where(e => e.PositionId == 1)
+                .Where(e => e.Position == Position.Manager)
                 .ToListAsync();
     }
 

@@ -1,4 +1,4 @@
-namespace RestaurantReservation.DB.Models.Entities;
+namespace RestaurantReservation.DB.Models.Enums;
 
 public enum PaymentMethod
 {

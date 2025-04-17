@@ -1,4 +1,5 @@
 using RestaurantReservation.DB.Models.Entities;
+using RestaurantReservation.DB.Models.Enums;
 
 namespace RestaurantReservation.DB.Seeds;
 
@@ -39,19 +40,7 @@ public static class DataSeed
             new Table { Id = 5, RestaurantId = 5, Capacity = 7 }
         ];
     }
-
-    public static List<Position> SeedPositions()
-    {
-        return
-        [
-            new Position { Id = 1, Name = "Manager" },
-            new Position { Id = 2, Name = "Waiter" },
-            new Position { Id = 3, Name = "Cashier" },
-            new Position { Id = 4, Name = "Chef" },
-            new Position { Id = 5, Name = "Dishwasher" }
-        ];
-    }
-
+    
     public static List<Customer> SeedCustomers()
     {
         return
@@ -68,11 +57,11 @@ public static class DataSeed
     {
         return
         [
-            new Employee { Id = 1, FirstName = "Masa", LastName = "Ahmad", RestaurantId = 1, PositionId = 1 },
-            new Employee { Id = 2, FirstName = "Khaled", LastName = "Isa", RestaurantId = 2, PositionId = 2 },
-            new Employee { Id = 3, FirstName = "Jehad", LastName = "Mohammad", RestaurantId = 3, PositionId = 3 },
-            new Employee { Id = 4, FirstName = "Wael", LastName = "Khaled", RestaurantId = 4, PositionId = 4 },
-            new Employee { Id = 5, FirstName = "Waleed", LastName = "Awad", RestaurantId = 5, PositionId = 5 }
+            new Employee { Id = 1, FirstName = "Masa", LastName = "Ahmad", RestaurantId = 1, Position  = Position.Cashier},
+            new Employee { Id = 2, FirstName = "Khaled", LastName = "Isa", RestaurantId = 2, Position = Position.Manager },
+            new Employee { Id = 3, FirstName = "Jehad", LastName = "Mohammad", RestaurantId = 3, Position = Position.Chef },
+            new Employee { Id = 4, FirstName = "Wael", LastName = "Khaled", RestaurantId = 4, Position = Position.Waiter },
+            new Employee { Id = 5, FirstName = "Waleed", LastName = "Awad", RestaurantId = 5, Position = Position.Manager }
         ];
     }
 

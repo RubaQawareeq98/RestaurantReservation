@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using RestaurantReservation.DB.Models.Enums;
 
 namespace RestaurantReservation.DB.Models.Entities;
 

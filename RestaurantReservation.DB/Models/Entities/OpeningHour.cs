@@ -1,11 +1,7 @@
-using RestaurantReservation.DB.Models.Interfaces;
-
 namespace RestaurantReservation.DB.Models.Entities;
 
-public class OpeningHour : IEntity
+public class OpeningHour : Entity
 {
-    public int Id { get; set; }
-    
     public DayOfWeek DayOfWeek { get; set; }
     
     public TimeSpan OpenHour { get; set; }

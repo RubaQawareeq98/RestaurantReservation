@@ -1,11 +1,7 @@
-using RestaurantReservation.DB.Models.Interfaces;
-
 namespace RestaurantReservation.DB.Models.Entities;
 
-public class Order : IEntity
+public class Order : Entity
 {
-    public int Id { get; set; }
-    
     public DateTime OrderDate { get; set; }
     
     public int? ReservationId { get; set; }

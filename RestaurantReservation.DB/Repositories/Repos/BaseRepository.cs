@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using RestaurantReservation.DB.Exceptions;
-using RestaurantReservation.DB.Models.Interfaces;
+using RestaurantReservation.DB.Models.Entities;
 using RestaurantReservation.DB.Repositories.Interfaces;
 
 namespace RestaurantReservation.DB.Repositories.Repos;
 
-public class BaseRepository<T>(RestaurantReservationDbContext context) : IBaseRepository <T> where T : class, IEntity
+public class BaseRepository<T>(RestaurantReservationDbContext context) : IBaseRepository <T> where T : Entity
 {
     private readonly DbSet<T> _entitySet = context.Set<T>();
     

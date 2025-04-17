@@ -1,11 +1,7 @@
-using RestaurantReservation.DB.Models.Interfaces;
-
 namespace RestaurantReservation.DB.Models.Entities;
 
-public class Customer : IEntity
+public class Customer : Entity
 {
-    public int Id { get; set; }
-    
     public required string FirstName { get; set; }
     
     public required string LastName { get; set; }

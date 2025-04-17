@@ -1,11 +1,7 @@
-using RestaurantReservation.DB.Models.Interfaces;
-
 namespace RestaurantReservation.DB.Models.Entities;
 
-public class Table : IEntity
+public class Table : Entity
 {
-    public int Id { get; set; }
-    
     public int Capacity { get; set; }
     
     public int? RestaurantId { get; set; }

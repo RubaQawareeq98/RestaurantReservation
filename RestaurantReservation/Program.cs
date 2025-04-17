@@ -32,21 +32,21 @@ static class Program
 
         try
         {
-            await CallCustomerCrudOperations(customerRepo);
-            await CallEmployeeCrudOperations(employeeRepo);
-            await CallRestaurantCrudOperations(restaurantRepo);
-            await CallReservationCrudOperations(reservationRepo);
-            await CallTableCrudOperations(tableRepository);
-            await CallOrderCrudOperations(orderRepo);
-            await CallOrderItemCrudOperations(orderItemRepo);
-            await CallMenuItemCrudOperations(menuItemRepo);
-            await ListManagers(employeeRepo);
-            await GetReservationsByCustomer(reservationRepo);
+            // await CallCustomerCrudOperations(customerRepo);
+            // await CallEmployeeCrudOperations(employeeRepo);
+            // await CallRestaurantCrudOperations(restaurantRepo);
+            // await CallReservationCrudOperations(reservationRepo);
+            // await CallTableCrudOperations(tableRepository);
+            // await CallOrderCrudOperations(orderRepo);
+            // await CallOrderItemCrudOperations(orderItemRepo);
+            // await CallMenuItemCrudOperations(menuItemRepo);
+            // await ListManagers(employeeRepo);
+            // await GetReservationsByCustomer(reservationRepo);
             await ListOrdersAndMenuItems(orderRepo);
-            await ListOrderedMenuItems(menuItemRepo);
-            await CalculateAverageOrderAmount(employeeRepo);
-            await QueryReservationDetailsView(context);
-            await QueryEmployeeWithRestaurantDetailsView(context);
+            // await ListOrderedMenuItems(menuItemRepo);
+            // await CalculateAverageOrderAmount(employeeRepo);
+            // await QueryReservationDetailsView(context);
+            // await QueryEmployeeWithRestaurantDetailsView(context);
         }
         catch (Exception e)
         {
@@ -216,14 +216,10 @@ static class Program
             throw new ArgumentException(Message);
         }
         
-        var orders = await orderRepository.ListOrdersAndMenuItems(reservationId);
-        foreach (var order in orders)
+        var ordersWithMenuItems = await orderRepository.ListOrdersAndMenuItems(reservationId);
+        foreach (var orderWithMenuItem in ordersWithMenuItems)
         {
-            Console.WriteLine(order);
-            foreach (var orderItem in order.OrderItems)
-            {
-                Console.WriteLine(orderItem);
-            }
+            Console.WriteLine(orderWithMenuItem);
         }
     }
 

@@ -6,10 +6,9 @@ using RestaurantReservation.DB.Views;
 
 namespace RestaurantReservation.DB;
 
-public class RestaurantReservationDbContext : DbContext 
+public class RestaurantReservationDbContext (DbContextOptions<RestaurantReservationDbContext> options) : DbContext (options)
 {
     public DbSet<Customer> Customers { get; set; }
-    
     
     public DbSet<Employee> Employees { get; set; }
     
@@ -32,14 +31,6 @@ public class RestaurantReservationDbContext : DbContext
     public DbSet<ReservationDetails> ReservationDetails { get; set; }
     
     public DbSet<EmployeeWithRestaurantDetails> EmployeeWithRestaurantDetails { get; set; }
-    
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlServer(
-                "Data Source = lenovo\\SQLEXPRESS01; Initial Catalog = RestaurantReservationCore; Integrated Security = True; Encrypt = false")
-            
-            ;
-    }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

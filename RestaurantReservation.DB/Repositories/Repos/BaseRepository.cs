@@ -31,7 +31,7 @@ public class BaseRepository<T>(RestaurantReservationDbContext context) : IBaseRe
         var isExist = await IsEntityExist(entity.Id);
         if (!isExist)
         {
-            throw new RecordNotFoundException();
+            throw new RecordNotFoundException($"{typeof(T)} with id: {entity.Id} not found");
         }
     }
 

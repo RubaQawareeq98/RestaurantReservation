@@ -14,7 +14,7 @@ public class OrderRepository(RestaurantReservationDbContext context) : BaseRepos
         var isExist = await IsEntityExist(reservationId);
         if (!isExist)
         {
-            throw new RecordNotFoundException();
+            throw new RecordNotFoundException($"Reservation with id {reservationId} not found");
         }
         
         return await _context.Orders

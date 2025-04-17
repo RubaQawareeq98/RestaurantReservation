@@ -1,3 +1,3 @@
 namespace RestaurantReservation.DB.Exceptions;
 
-public class RecordNotFoundException() : Exception ("Entity not found");
+public class RecordNotFoundException(string message) : Exception (message);

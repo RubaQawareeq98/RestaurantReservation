@@ -16,7 +16,7 @@ public class OrderRepository(RestaurantReservationDbContext context) : BaseRepos
         {
             throw new RecordNotFoundException();
         }
-
+        
         return await _context.Orders
             .Where(o => o.ReservationId == reservationId)
             .Include(o => o.PaymentDetail)

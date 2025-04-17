@@ -1,0 +1,45 @@
+# Ignore Visual Studio user-specific files
+.vs/
+*.suo
+*.user
+*.userosscache
+
+# Ignore build outputs
+bin/
+obj/
+
+# Ignore NuGet packages
+*.nupkg
+packages/
+
+# Ignore Debug and Release folders
+Debug/
+Release/
+
+# Ignore Visual Studio cache
+ipch/
+*.aps
+*.ncb
+*.opendb
+*.ilk
+
+# Ignore logs and temporary files
+*.log
+*.tlog
+*.temp
+
+# Ignore Rider and JetBrains files
+.idea/
+*.iml
+
+# Ignore compiled DLLs and EXEs
+*.exe
+*.dll
+*.pdb
+
+# Ignore publish folder
+publish/
+out/
+
+# Ignore auto-generated files
+GeneratedFiles/

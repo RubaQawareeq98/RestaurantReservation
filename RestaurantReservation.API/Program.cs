@@ -8,7 +8,7 @@ using RestaurantReservation.DB.Repositories.Repos;
 
 namespace RestaurantReservation.API;
 
-public class Program
+public static class Program
 {
     public static void Main(string[] args)
     {
@@ -19,14 +19,22 @@ public class Program
         builder.Services.AddValidatorsFromAssemblyContaining<CustomerRequestValidator>();
         builder.Services.AddValidatorsFromAssemblyContaining<RestaurantRequestValidator>();
         builder.Services.AddValidatorsFromAssemblyContaining<ReservationRequestValidator>();
+        builder.Services.AddValidatorsFromAssemblyContaining<TableRequestValidator>();
 
 
-
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen(); 
         builder.Services.AddControllers();
-
-        builder.Services.AddScoped<IRestaurantRepository, RestaurantRepository>();
-        builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
+        
+        builder.Services.AddDbContext<RestaurantReservationDbContext>();
         builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+        builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+        builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
+        builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+        builder.Services.AddScoped<IOrderItemRepository, OrderItemRepository>();
+        builder.Services.AddScoped<IMenuItemRepository, MenuItemRepository>();
+        builder.Services.AddScoped<IRestaurantRepository, RestaurantRepository>();
+        builder.Services.AddScoped<ITableRepository, TableRepository>();
         
         
         builder.Services.AddDbContext<RestaurantReservationDbContext>(options =>
@@ -42,6 +50,8 @@ public class Program
         if (app.Environment.IsDevelopment())
         {
             app.MapOpenApi();
+            app.UseSwagger();
+            app.UseSwaggerUI();
         }
 
         app.UseHttpsRedirection();

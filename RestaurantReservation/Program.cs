@@ -13,13 +13,14 @@ static class Program
 {
     private const string Message = "Please enter a valid integer";
     
+    
+    
     static async Task Main()
     {
         var host = Host.CreateDefaultBuilder();
 
         var services = host.Configure();
         
-        var context = services.GetRequiredService<RestaurantReservationDbContext>();
         
         var customerRepo = services.GetRequiredService<ICustomerRepository>();
         var employeeRepo = services.GetRequiredService<IEmployeeRepository>();
@@ -32,6 +33,24 @@ static class Program
 
         try
         {
+            var scopeFactory = services.GetRequiredService<IServiceScopeFactory>();
+
+            var task1 = Task.Run(async () =>
+            {
+                using var scope = scopeFactory.CreateScope();
+                var context = scope.ServiceProvider.GetRequiredService<RestaurantReservationDbContext>();
+                var restaurants = await context.Restaurants.ToListAsync();
+            });
+
+            var task2 = Task.Run(async () =>
+            {
+                using var scope = scopeFactory.CreateScope();
+                var context = scope.ServiceProvider.GetRequiredService<RestaurantReservationDbContext>();
+                var orders = await context.Orders.ToListAsync();
+            });
+
+            await Task.WhenAll(task1, task2);
+            
             // await CallCustomerCrudOperations(customerRepo);
             // await CallEmployeeCrudOperations(employeeRepo);
             // await CallRestaurantCrudOperations(restaurantRepo);
@@ -42,7 +61,7 @@ static class Program
             // await CallMenuItemCrudOperations(menuItemRepo);
             // await ListManagers(employeeRepo);
             // await GetReservationsByCustomer(reservationRepo);
-            await ListOrdersAndMenuItems(orderRepo);
+            //wait ListOrdersAndMenuItems(orderRepo);
             // await ListOrderedMenuItems(menuItemRepo);
             // await CalculateAverageOrderAmount(employeeRepo);
             // await QueryReservationDetailsView(context);
@@ -63,7 +82,7 @@ static class Program
         customer.PhoneNumber = "059789456";
         await customerRepository.UpdateAsync(customer);
 
-        var customers = await customerRepository.GetAllAsync();
+        var customers = await customerRepository.GetAllAsync(1, 1);
         var deletedCustomer = customers.FirstOrDefault();
         await customerRepository.DeleteAsync(deletedCustomer);
         
@@ -78,7 +97,7 @@ static class Program
         employee.RestaurantId = 2;
         await employeeRepository.UpdateAsync(employee);
 
-        var employees = await employeeRepository.GetAllAsync();
+        var employees = await employeeRepository.GetAllAsync(1, 0);
         var deletedEmployee = employees.LastOrDefault();
         await employeeRepository.DeleteAsync(deletedEmployee);
         
@@ -93,7 +112,7 @@ static class Program
         restaurant.Name = "KFC";
         await restaurantRepository.UpdateAsync(restaurant);
 
-        var restaurants = await restaurantRepository.GetAllAsync();
+        var restaurants = await restaurantRepository.GetAllAsync(1, 0);
         var deletedRestaurant = restaurants.FirstOrDefault();
         await restaurantRepository.DeleteAsync(deletedRestaurant);
         
@@ -108,7 +127,7 @@ static class Program
         reservation.PartySize = 7;
         await reservationRepository.UpdateAsync(reservation);
 
-        var restaurants = await reservationRepository.GetAllAsync();
+        var restaurants = await reservationRepository.GetAllAsync(1, 0);
         var deletedRestaurant = restaurants.FirstOrDefault();
         await reservationRepository.DeleteAsync(deletedRestaurant);
         
@@ -123,7 +142,7 @@ static class Program
         table.Capacity = 9;
         await tableRepository.UpdateAsync(table);
 
-        var restaurants = await tableRepository.GetAllAsync();
+        var restaurants = await tableRepository.GetAllAsync(1, 0);
         var deletedTable = restaurants.FirstOrDefault();
         await tableRepository.DeleteAsync(deletedTable);
         
@@ -142,7 +161,7 @@ static class Program
         order.EmployeeId = 4;
         await orderRepository.UpdateAsync(order);
         
-        var restaurants = await orderRepository.GetAllAsync();
+        var restaurants = await orderRepository.GetAllAsync(1, 0);
         var deletedOrder = restaurants.FirstOrDefault();
         await orderRepository.DeleteAsync(deletedOrder);
         
@@ -157,7 +176,7 @@ static class Program
         orderItem.Quantity = 12;
         await orderItemRepository.UpdateAsync(orderItem);
 
-        var restaurants = await orderItemRepository.GetAllAsync();
+        var restaurants = await orderItemRepository.GetAllAsync(1, 0);
         var deletedOrderItem = restaurants.FirstOrDefault();
         await orderItemRepository.DeleteAsync(deletedOrderItem);
         
@@ -172,7 +191,7 @@ static class Program
         menuItem.Price = 122;
         await menuItemRepository.UpdateAsync(menuItem);
 
-        var restaurants = await menuItemRepository.GetAllAsync();
+        var restaurants = await menuItemRepository.GetAllAsync(1, 0);
         var deletedOrderItem = restaurants.FirstOrDefault();
         await menuItemRepository.DeleteAsync(deletedOrderItem);
         

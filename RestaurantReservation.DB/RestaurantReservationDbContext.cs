@@ -56,7 +56,7 @@ public class RestaurantReservationDbContext (DbContextOptions<RestaurantReservat
     }
 
     [DbFunction("fn_CalculateTotalRevenue", "dbo")]
-    public static decimal CalculateTotalRevenue(int restaurantId)
+    public  decimal CalculateTotalRevenue(int restaurantId)
     {
         throw new NotImplementedException();
     }

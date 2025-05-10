@@ -13,13 +13,13 @@ public class OrderRepository(RestaurantReservationDbContext context) : BaseRepos
     {
         await EnsureEntityExist(reservationId);
 
-        var list = await context.Orders
+        var list = await _context.Orders
             .Where(o => o.ReservationId == reservationId)
-            .Join(context.OrderItems,
+            .Join(_context.OrderItems,
                 o => o.Id,
                 oi => oi.OrderId,
                 (o, oi) => new { o, oi })
-            .Join(context.MenuItems,
+            .Join(_context.MenuItems,
                 temp => temp.oi.MenuItemId,
                 m => m.Id,
                 (temp, item) => new OrderWithMenuItem
@@ -40,7 +40,7 @@ public class OrderRepository(RestaurantReservationDbContext context) : BaseRepos
         return list;
     }
 
-    public override async Task<List<Order>> GetAllAsync()
+    public override async Task<List<Order>> GetAllAsync(int pageNumber, int pageSize)
     {
         return await _context.Orders
                     .Include(o => o.PaymentDetail)

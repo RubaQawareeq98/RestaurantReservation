@@ -1,3 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using RestaurantReservation.DB;
+using RestaurantReservation.DB.Repositories.Interfaces;
+using RestaurantReservation.DB.Repositories.Repos;
+
 namespace RestaurantReservation.API;
 
 public class Program
@@ -9,6 +14,11 @@ public class Program
         // Add services to the container.
 
         builder.Services.AddControllers();
+
+        builder.Services.AddScoped<IRestaurantRepository, RestaurantRepository>();
+        builder.Services.AddDbContext<RestaurantReservationDbContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnectionString")));
+        
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
 

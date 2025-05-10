@@ -40,10 +40,20 @@ public class OrderRepository(RestaurantReservationDbContext context) : BaseRepos
         return list;
     }
 
-    public override async Task<List<Order>> GetAllAsync(int pageNumber, int pageSize)
+    public override async Task<(List<Order> data, PaginationResponse paginationResponse)> GetAllAsync(int pageNumber,
+        int pageSize)
     {
-        return await _context.Orders
+        var list = await _context.Orders
                     .Include(o => o.PaymentDetail)
                     .ToListAsync();
+        
+        var data = list
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+        
+        var paginationResponse = new PaginationResponse(list.Count, pageNumber, pageSize);
+
+        return (data, paginationResponse);
     }
 }

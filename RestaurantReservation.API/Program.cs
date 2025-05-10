@@ -18,8 +18,7 @@ public class Program
         builder.Services.AddScoped<IRestaurantRepository, RestaurantRepository>();
         builder.Services.AddDbContext<RestaurantReservationDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnectionString")));
-        
-        // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+        builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         builder.Services.AddOpenApi();
 
         var app = builder.Build();

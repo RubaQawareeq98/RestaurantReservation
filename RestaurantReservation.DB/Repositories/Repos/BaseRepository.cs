@@ -36,14 +36,19 @@ public class BaseRepository<T>(RestaurantReservationDbContext context) : IBaseRe
         await context.SaveChangesAsync();
     }
 
-    public virtual async Task<List<T>> GetAllAsync(int pageNumber, int pageSize)
+    public virtual async Task<(List<T> data, PaginationResponse paginationResponse)> GetAllAsync(int pageNumber,
+        int pageSize)
     {
-        var data = await _entitySet
+        var list = await _entitySet.ToListAsync();
+        
+        var data = list
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
-            .ToListAsync();
+            .ToList();
+        
+        var paginationResponse = new PaginationResponse(list.Count, pageNumber, pageSize);
 
-        return data;
+        return (data, paginationResponse);
     }
 
     public async Task EnsureEntityExist(int id)

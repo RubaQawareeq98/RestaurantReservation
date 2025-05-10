@@ -1,5 +1,7 @@
+using System.Text.Json;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using RestaurantReservation.API.Models.Pagination;
+using RestaurantReservation.API.Models;
 using RestaurantReservation.DB.Models.Entities;
 using RestaurantReservation.DB.Repositories.Interfaces;
 
@@ -7,7 +9,7 @@ namespace RestaurantReservation.API.Controllers;
 
 [Route("api/restaurants")]
 [ApiController]
-public class RestaurantController(IRestaurantRepository restaurantRepository) : ControllerBase
+public class RestaurantController(IRestaurantRepository restaurantRepository, IMapper mapper) : ControllerBase
 {
     private int _maxPageSize = 80;
     
@@ -21,11 +23,10 @@ public class RestaurantController(IRestaurantRepository restaurantRepository) : 
         
         _maxPageSize = Math.Min(_maxPageSize, pageSize);
         
-        var restaurants = await restaurantRepository.GetAllAsync(pageNumber, pageSize);
-        
-        var paginationResponse = new PaginationResponse<Restaurant>(restaurants, restaurants.Count, pageNumber, pageSize);
-        
-        return Ok(paginationResponse);
+        var (data, paginationResponse) = await restaurantRepository.GetAllAsync(pageNumber, pageSize);
+        Response.Headers.Append("X-Pagination-Metadata", JsonSerializer.Serialize(paginationResponse));
+
+        return Ok(mapper.Map<List<RestaurantResponseDto>>(data));
     }
 
     [HttpPost]

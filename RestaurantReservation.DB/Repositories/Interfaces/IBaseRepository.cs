@@ -9,4 +9,5 @@ public interface IBaseRepository <T>
     public Task UpdateAsync(T? entity);
     public Task<(List<T> data, PaginationResponse paginationResponse)> GetAllAsync(int pageNumber, int pageSize);
     public Task EnsureEntityExist(int id);
+    public Task<T?> GetByIdAsync(int id);
 }

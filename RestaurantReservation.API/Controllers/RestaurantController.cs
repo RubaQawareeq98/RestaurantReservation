@@ -29,11 +29,32 @@ public class RestaurantController(IRestaurantRepository restaurantRepository, IM
         return Ok(mapper.Map<List<RestaurantResponseDto>>(data));
     }
 
-    [HttpPost]
-    public async Task<ActionResult<Restaurant>> AddRestaurant(Restaurant restaurant)
+    [HttpGet("{id}", Name ="GetRestaurantById")]
+    public async Task<ActionResult<Restaurant>> GetRestaurant(int restaurantId)
     {
-        if (!ModelState.IsValid) return BadRequest(ModelState);
+        var restaurant = await restaurantRepository.GetByIdAsync(restaurantId);
+        if (restaurant is null)
+        {
+            return NotFound("No restaurant found");
+        }
+
+        return Ok(restaurant);
+    }
+
+    /// <summary>
+    /// Create new Restaurant
+    /// </summary>
+    /// <param name="restaurantRequestBody"></param>
+    /// <returns>created restaurant</returns>
+    [HttpPost]
+    public async Task<ActionResult<Restaurant>> AddRestaurant(RestaurantRequestBodyDto restaurantRequestBody)
+    {
+        var restaurant = mapper.Map<Restaurant>(restaurantRequestBody);
+        
         await restaurantRepository.AddAsync(restaurant);
-        return CreatedAtAction(nameof(GetRestaurants), new { id = restaurant.Id });
+        
+        return CreatedAtRoute("GetRestaurantById", 
+            new { id = restaurant.Id },
+            mapper.Map<RestaurantResponseDto>(restaurant));
     }
 }

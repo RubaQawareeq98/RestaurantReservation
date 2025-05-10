@@ -9,5 +9,6 @@ public class RestaurantProfile : Profile
     public RestaurantProfile()
     {
         CreateMap<Restaurant, RestaurantResponseDto>();
+        CreateMap<RestaurantRequestBodyDto, Restaurant>();
     }
 }

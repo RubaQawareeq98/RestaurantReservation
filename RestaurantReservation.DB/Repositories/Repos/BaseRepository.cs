@@ -59,4 +59,9 @@ public class BaseRepository<T>(RestaurantReservationDbContext context) : IBaseRe
             throw new RecordNotFoundException($"{typeof(T)} with id: {id} not found");
         }
     }
+
+    public async Task<T?> GetByIdAsync(int id)
+    {
+        return await _entitySet.FirstOrDefaultAsync(e => e.Id == id);
+    }
 }

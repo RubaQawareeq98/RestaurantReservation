@@ -7,7 +7,7 @@ using RestaurantReservation.DB.Repositories.Interfaces;
 
 namespace RestaurantReservation.API.Controllers;
 
-[Route("api/Reservations")]
+[Route("api/reservations")]
 [ApiController]
 public class ReservationController(IReservationRepository reservationRepository, IMapper mapper) : ControllerBase
 {

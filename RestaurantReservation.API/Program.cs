@@ -16,6 +16,9 @@ public class Program
         builder.Services.AddControllers();
 
         builder.Services.AddScoped<IRestaurantRepository, RestaurantRepository>();
+        builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
+        
+        
         builder.Services.AddDbContext<RestaurantReservationDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnectionString")));
         builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

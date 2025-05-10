@@ -1,8 +1,7 @@
-namespace RestaurantReservation.API.Models;
+namespace RestaurantReservation.API.Models.Restaurants;
 
-public class RestaurantResponseDto
+public class RestaurantRequestBodyDto
 {
-    public required int Id { get; set; }
     public required string Name { get; set; }
     
     public required string PhoneNumber { get; set; }

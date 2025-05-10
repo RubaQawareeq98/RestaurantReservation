@@ -2,6 +2,7 @@ using System.Text.Json;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using RestaurantReservation.API.Models;
+using RestaurantReservation.API.Models.Restaurants;
 using RestaurantReservation.DB.Models.Entities;
 using RestaurantReservation.DB.Repositories.Interfaces;
 
@@ -45,7 +46,7 @@ public class RestaurantController(IRestaurantRepository restaurantRepository, IM
             return NotFound("No restaurant found");
         }
 
-        return Ok(restaurant);
+        return Ok(mapper.Map<RestaurantResponseDto>(restaurant));
     }
 
     /// <summary>
@@ -69,7 +70,6 @@ public class RestaurantController(IRestaurantRepository restaurantRepository, IM
     public async Task<ActionResult<RestaurantResponseDto>> UpdateRestaurant(int restaurantId,
         RestaurantRequestBodyDto restaurantRequestBody)
     {
-        Console.WriteLine(restaurantId);
         var restaurant = await restaurantRepository.GetByIdAsync(restaurantId);
         if (restaurant is null)
         {

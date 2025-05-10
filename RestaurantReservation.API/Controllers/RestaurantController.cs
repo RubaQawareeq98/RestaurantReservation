@@ -13,6 +13,13 @@ public class RestaurantController(IRestaurantRepository restaurantRepository, IM
 {
     private int _maxPageSize = 80;
     
+    /// <summary>
+    /// Read Restaurants data
+    /// </summary>
+    /// <param name="pageNumber"></param>
+    /// <param name="pageSize"></param>
+    /// <returns></returns>
+    
     [HttpGet]
     public async Task<ActionResult<List<Restaurant>>> GetRestaurants(int pageNumber, int pageSize)
     {
@@ -29,7 +36,7 @@ public class RestaurantController(IRestaurantRepository restaurantRepository, IM
         return Ok(mapper.Map<List<RestaurantResponseDto>>(data));
     }
 
-    [HttpGet("{id}", Name ="GetRestaurantById")]
+    [HttpGet("{restaurantId:int}", Name ="GetRestaurantById")]
     public async Task<ActionResult<Restaurant>> GetRestaurant(int restaurantId)
     {
         var restaurant = await restaurantRepository.GetByIdAsync(restaurantId);
@@ -47,7 +54,7 @@ public class RestaurantController(IRestaurantRepository restaurantRepository, IM
     /// <param name="restaurantRequestBody"></param>
     /// <returns>created restaurant</returns>
     [HttpPost]
-    public async Task<ActionResult<Restaurant>> AddRestaurant(RestaurantRequestBodyDto restaurantRequestBody)
+    public async Task<ActionResult<RestaurantResponseDto>> AddRestaurant(RestaurantRequestBodyDto restaurantRequestBody)
     {
         var restaurant = mapper.Map<Restaurant>(restaurantRequestBody);
         
@@ -56,5 +63,38 @@ public class RestaurantController(IRestaurantRepository restaurantRepository, IM
         return CreatedAtRoute("GetRestaurantById", 
             new { id = restaurant.Id },
             mapper.Map<RestaurantResponseDto>(restaurant));
+    }
+
+    [HttpPut("{restaurantId:int}")]
+    public async Task<ActionResult<RestaurantResponseDto>> UpdateRestaurant(int restaurantId,
+        RestaurantRequestBodyDto restaurantRequestBody)
+    {
+        Console.WriteLine(restaurantId);
+        var restaurant = await restaurantRepository.GetByIdAsync(restaurantId);
+        if (restaurant is null)
+        {
+            return NotFound("No restaurant found");
+        }
+        mapper.Map(restaurantRequestBody, restaurant);
+        await restaurantRepository.UpdateAsync(restaurant);
+        return NoContent();
+    }
+    
+    /// <summary>
+    /// Delete restaurant by id
+    /// </summary>
+    /// <param name="restaurantId"></param>
+    /// <returns></returns>
+
+    [HttpDelete("{restaurantId:int}")]
+    public async Task<ActionResult<RestaurantResponseDto>> DeleteRestaurant(int restaurantId)
+    {
+        var restaurant = await restaurantRepository.GetByIdAsync(restaurantId);
+        if (restaurant is null)
+        {
+            return NotFound("No restaurant found");
+        }
+        await restaurantRepository.DeleteAsync(restaurant);
+        return NoContent();
     }
 }

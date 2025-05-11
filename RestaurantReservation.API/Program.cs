@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
+using RestaurantReservation.API.Middlewares;
 using RestaurantReservation.API.ServiceRegistration;
 using RestaurantReservation.DB;
 
@@ -36,7 +37,8 @@ public static class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-
+        app.UseMiddleware<ExceptionHandlingMiddleware>();
+        
         app.UseHttpsRedirection();
 
         app.UseAuthentication();

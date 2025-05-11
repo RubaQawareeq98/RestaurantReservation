@@ -16,5 +16,6 @@ public static class AddValidators
         services.AddValidatorsFromAssemblyContaining<EmployeeRequestValidator>();
         services.AddValidatorsFromAssemblyContaining<OrderRequestValidator>();
         services.AddValidatorsFromAssemblyContaining<PaymentDetailsRequestValidator>();
+        services.AddValidatorsFromAssemblyContaining<LoginRequestValidator>();
     }
 }

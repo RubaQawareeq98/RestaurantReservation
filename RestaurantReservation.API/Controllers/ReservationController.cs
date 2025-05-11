@@ -102,4 +102,21 @@ public class ReservationController(IReservationRepository reservationRepository,
         await reservationRepository.DeleteAsync(reservation);
         return NoContent();
     }
+
+    [HttpGet("customer/{customerId:int}")]
+    public async Task<ActionResult<List<Reservation>>> GetReservationsByCustomerId(int pageNumber, int pageSize,
+        int customerId)
+    {
+        if (pageNumber < 1 || pageSize < 1)
+        {
+            return BadRequest("Page number and page size must be greater than 0");
+        }
+        
+        _maxPageSize = Math.Min(_maxPageSize, pageSize);
+
+        var (reservations, paginationResponse) = await reservationRepository.GetReservationsByCustomer(customerId, pageNumber, pageSize);
+        Response.Headers.Append("X-Pagination-Metadata", JsonSerializer.Serialize(paginationResponse));
+
+        return Ok(mapper.Map<List<ReservationResponseDto>>(reservations));
+    }
 }

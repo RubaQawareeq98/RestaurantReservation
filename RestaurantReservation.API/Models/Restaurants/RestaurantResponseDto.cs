@@ -1,14 +1,9 @@
-using RestaurantReservation.DB.Models.Entities;
+using RestaurantReservation.API.Models.Restaurants.OpeningHours;
 
 namespace RestaurantReservation.API.Models.Restaurants;
 
 public class RestaurantResponseDto
 {
-    public RestaurantResponseDto(List<OpeningHour> openingHours)
-    {
-        OpeningHours = openingHours;
-    }
-
     public required int Id { get; set; }
     
     public required string Name { get; set; }
@@ -17,5 +12,5 @@ public class RestaurantResponseDto
     
     public required string Address { get; set; }
     
-    public List<OpeningHour> OpeningHours { get; set; }
+    public List<OpeningHoursResponseDto> OpeningHours { get; set; }
 }

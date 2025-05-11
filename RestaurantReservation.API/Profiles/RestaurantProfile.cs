@@ -11,7 +11,5 @@ public class RestaurantProfile : Profile
     {
         CreateMap<Restaurant, RestaurantResponseDto>();
         CreateMap<RestaurantRequestBodyDto, Restaurant>();
-        CreateMap<OpeningHour, OpeningHoursResponseDto>();
-
     }
 }

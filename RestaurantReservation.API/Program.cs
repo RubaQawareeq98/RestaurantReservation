@@ -22,6 +22,7 @@ public static class Program
         builder.Services.AddValidatorsFromAssemblyContaining<ReservationRequestValidator>();
         builder.Services.AddValidatorsFromAssemblyContaining<TableRequestValidator>();
         builder.Services.AddValidatorsFromAssemblyContaining<EmployeeRequestValidator>();
+        builder.Services.AddValidatorsFromAssemblyContaining<OrderRequestValidator>();
 
 
         builder.Services.AddEndpointsApiExplorer();
@@ -29,7 +30,6 @@ public static class Program
         builder.Services.AddControllers().AddJsonOptions(options =>
         {
             options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-            
         });
         
         builder.Services.AddDbContext<RestaurantReservationDbContext>();

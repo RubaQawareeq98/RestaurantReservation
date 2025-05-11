@@ -3,9 +3,9 @@ using RestaurantReservation.API.Models.Tables;
 
 namespace RestaurantReservation.API.Validator;
 
-public class TableRequestValidator : AbstractValidator<TableRequestBodyDto>
+public abstract class TableRequestValidator : AbstractValidator<TableRequestBodyDto>
 {
-    public TableRequestValidator()
+    protected TableRequestValidator()
     {
         RuleFor(table => table.Capacity)
             .GreaterThan(0);

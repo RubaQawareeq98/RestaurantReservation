@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
@@ -20,11 +21,16 @@ public static class Program
         builder.Services.AddValidatorsFromAssemblyContaining<RestaurantRequestValidator>();
         builder.Services.AddValidatorsFromAssemblyContaining<ReservationRequestValidator>();
         builder.Services.AddValidatorsFromAssemblyContaining<TableRequestValidator>();
+        builder.Services.AddValidatorsFromAssemblyContaining<EmployeeRequestValidator>();
 
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(); 
-        builder.Services.AddControllers();
+        builder.Services.AddControllers().AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            
+        });
         
         builder.Services.AddDbContext<RestaurantReservationDbContext>();
         builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();

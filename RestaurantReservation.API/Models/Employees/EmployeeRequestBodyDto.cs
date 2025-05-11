@@ -1,6 +1,14 @@
+using RestaurantReservation.DB.Models.Enums;
+
 namespace RestaurantReservation.API.Models.Employees;
 
-public class EmployeeRequestBodyDto
+public abstract class EmployeeRequestBodyDto
 {
+    public required string FirstName { get; set; }
     
+    public required string LastName { get; set; }
+    
+    public Position Position { get; set; }
+    
+    public int? RestaurantId { get; set; }
 }

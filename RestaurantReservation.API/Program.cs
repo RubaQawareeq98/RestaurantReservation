@@ -23,6 +23,7 @@ public static class Program
         builder.Services.AddValidatorsFromAssemblyContaining<TableRequestValidator>();
         builder.Services.AddValidatorsFromAssemblyContaining<EmployeeRequestValidator>();
         builder.Services.AddValidatorsFromAssemblyContaining<OrderRequestValidator>();
+        builder.Services.AddValidatorsFromAssemblyContaining<PaymentDetailsRequestValidator>();
 
 
         builder.Services.AddEndpointsApiExplorer();

@@ -102,4 +102,20 @@ public class EmployeeController(IEmployeeRepository employeeRepository, IMapper 
         await employeeRepository.DeleteAsync(employee);
         return NoContent();
     }
+
+    [HttpGet("managers")]
+    public async Task<ActionResult<List<EmployeeResponseDto>>> GetAllManagers(int pageNumber, int pageSize)
+    {
+        if (pageNumber < 1 || pageSize < 1)
+        {
+            return BadRequest("Page number and page size must be greater than 0");
+        }
+        
+        _maxPageSize = Math.Min(_maxPageSize, pageSize);
+        
+        var (managers, paginationResponse) = await employeeRepository.GetManagersAsync(pageNumber, pageSize);
+        Response.Headers.Append("X-Pagination-Metadata", JsonSerializer.Serialize(paginationResponse));
+
+        return mapper.Map<List<EmployeeResponseDto>>(managers);
+    }
 }

@@ -30,7 +30,7 @@ public class JwtTokenGeneratorService(JwtConfiguration configuration, IUserRepos
         {
             new("sub", user.Id.ToString()),
             new("userName", user.Username),
-            new("role", user.Role.ToString()),
+            new("role", user.Role.ToString())
         };
 
         var jwt = new JwtSecurityToken(

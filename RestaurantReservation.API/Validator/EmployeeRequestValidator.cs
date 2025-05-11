@@ -3,7 +3,7 @@ using RestaurantReservation.API.Models.Employees;
 
 namespace RestaurantReservation.API.Validator;
 
-public class EmployeeRequestValidator : AbstractValidator<EmployeeRequestBodyDto>
+public abstract class EmployeeRequestValidator : AbstractValidator<EmployeeRequestBodyDto>
 {
     public EmployeeRequestValidator()
     {

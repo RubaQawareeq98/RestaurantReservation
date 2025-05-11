@@ -9,6 +9,7 @@ using RestaurantReservation.DB.Repositories.Interfaces;
 
 namespace RestaurantReservation.API.Controllers;
 
+[ApiVersion("1.0")]
 [Route("api/restaurants")]
 [Authorize]
 [ApiController]

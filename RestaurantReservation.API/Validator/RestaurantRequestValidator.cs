@@ -1,10 +1,9 @@
 using FluentValidation;
-using RestaurantReservation.API.Models;
 using RestaurantReservation.API.Models.Restaurants;
 
 namespace RestaurantReservation.API.Validator;
 
-public class RestaurantRequestValidator : AbstractValidator<RestaurantRequestBodyDto>
+public abstract class RestaurantRequestValidator : AbstractValidator<RestaurantRequestBodyDto>
 {
     public RestaurantRequestValidator()
     {

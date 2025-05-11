@@ -4,8 +4,8 @@ namespace RestaurantReservation.API.Models.OrderWithMenuItems;
 
 public class OrderWithMenuItemResponseDto
 {
-    public int OrderId { get; set; }
-    public DateTime OrderDate { get; set; }
-    public int Quantity { get; set; }
-    public MenuItemResponseDto MenuItem { get; set; }
+    public int OrderId { get; init; }
+    public DateTime OrderDate { get; init; }
+    public int Quantity { get; init; }
+    public MenuItemResponseDto MenuItem { get; init; }
 }

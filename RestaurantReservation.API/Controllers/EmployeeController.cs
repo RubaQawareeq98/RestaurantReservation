@@ -118,4 +118,21 @@ public class EmployeeController(IEmployeeRepository employeeRepository, IMapper 
 
         return mapper.Map<List<EmployeeResponseDto>>(managers);
     }
+
+    [HttpGet("{employeeId:int}/average-order-amount")]
+    public async Task<ActionResult<decimal>> GetEmployeeOrderAverageAmount(int employeeId)
+    {
+        var employee = await employeeRepository.GetByIdAsync(employeeId);
+        if (employee is null)
+        {
+            return NotFound("Employee not found");
+        }
+        var TotalAverageAmount = await employeeRepository.CalculateAverageOrderAmount(employeeId);
+        
+        return Ok(
+            new
+        {
+            TotalAverageAmount
+        });
+    }
 }

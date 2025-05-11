@@ -1,5 +1,6 @@
 using System.Text.Json;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RestaurantReservation.API.Models.Tables;
 using RestaurantReservation.DB.Models.Entities;
@@ -8,6 +9,7 @@ using RestaurantReservation.DB.Repositories.Interfaces;
 namespace RestaurantReservation.API.Controllers;
 
 [Route("api/tables")]
+[Authorize]
 [ApiController]
 public class TableController(ITableRepository tableRepository, IMapper mapper) : ControllerBase
 {

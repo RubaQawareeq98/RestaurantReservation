@@ -1,5 +1,6 @@
 using System.Text.Json;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RestaurantReservation.API.Models.MenuItems;
 using RestaurantReservation.API.Models.OrderWithMenuItems;
@@ -11,6 +12,7 @@ using RestaurantReservation.DB.Repositories.Interfaces;
 namespace RestaurantReservation.API.Controllers;
 
 [Route("api/reservations")]
+[Authorize]
 [ApiController]
 public class ReservationController(IReservationRepository reservationRepository,
     IOrderRepository orderRepository,

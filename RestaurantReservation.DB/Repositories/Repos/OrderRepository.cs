@@ -9,11 +9,12 @@ public class OrderRepository(RestaurantReservationDbContext context) : BaseRepos
 {
     private readonly RestaurantReservationDbContext _context = context;
 
-    public async Task<List<OrderWithMenuItem>> ListOrdersAndMenuItems(int reservationId)
+    public async Task<(List<OrderWithMenuItem> data, PaginationResponse paginationResponse)> ListOrdersAndMenuItems(
+        int reservationId, int pageNumber, int pageSize)
     {
         await EnsureEntityExist(reservationId);
 
-        var list = await _context.Orders
+        var list = _context.Orders
             .Where(o => o.ReservationId == reservationId)
             .Join(_context.OrderItems,
                 o => o.Id,
@@ -34,10 +35,16 @@ public class OrderRepository(RestaurantReservationDbContext context) : BaseRepos
                         Price = item.Price,
                         Description = item.Description,
                     }
-                })
+                });
+        
+        var data = await list
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
+        
+        var paginationResponse = new PaginationResponse(data.Count, pageNumber, pageSize);
 
-        return list;
+        return (data, paginationResponse);
     }
 
     public override async Task<(List<Order> data, PaginationResponse paginationResponse)> GetAllAsync(int pageNumber,

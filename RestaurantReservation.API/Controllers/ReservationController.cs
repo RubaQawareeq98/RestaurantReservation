@@ -1,7 +1,9 @@
 using System.Text.Json;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using RestaurantReservation.API.Models.OrderWithMenuItems;
 using RestaurantReservation.API.Models.Reservations;
+using RestaurantReservation.DB.DTOS;
 using RestaurantReservation.DB.Models.Entities;
 using RestaurantReservation.DB.Repositories.Interfaces;
 
@@ -9,7 +11,7 @@ namespace RestaurantReservation.API.Controllers;
 
 [Route("api/reservations")]
 [ApiController]
-public class ReservationController(IReservationRepository reservationRepository, IMapper mapper) : ControllerBase
+public class ReservationController(IReservationRepository reservationRepository, IOrderRepository orderRepository, IMapper mapper) : ControllerBase
 {
     private int _maxPageSize = 80;
     
@@ -118,5 +120,22 @@ public class ReservationController(IReservationRepository reservationRepository,
         Response.Headers.Append("X-Pagination-Metadata", JsonSerializer.Serialize(paginationResponse));
 
         return Ok(mapper.Map<List<ReservationResponseDto>>(reservations));
+    }
+    
+    [HttpGet("{reservationId:int}/orders")]
+    public async Task<ActionResult<List<OrderWithMenuItem>>> GetReservationOrders(int pageNumber, int pageSize,
+        int reservationId)
+    {
+        if (pageNumber < 1 || pageSize < 1)
+        {
+            return BadRequest("Page number and page size must be greater than 0");
+        }
+        
+        _maxPageSize = Math.Min(_maxPageSize, pageSize);
+
+        var (orders, paginationResponse) = await orderRepository.ListOrdersAndMenuItems(reservationId, pageNumber, pageSize);
+        Response.Headers.Append("X-Pagination-Metadata", JsonSerializer.Serialize(paginationResponse));
+
+        return Ok(mapper.Map<List<OrderWithMenuItemResponseDto>>(orders));
     }
 }

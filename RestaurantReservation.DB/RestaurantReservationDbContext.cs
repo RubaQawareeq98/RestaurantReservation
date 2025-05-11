@@ -24,6 +24,8 @@ public class RestaurantReservationDbContext (DbContextOptions<RestaurantReservat
     
     public DbSet<Table> Tables { get; set; }
     
+    public DbSet<User> Users { get; set; }
+    
     public DbSet<Reservation> Reservations { get; set; }
     
     public DbSet<PaymentDetail> PaymentDetails { get; set; }

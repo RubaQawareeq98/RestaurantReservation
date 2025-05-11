@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RestaurantReservation.DB;
 
@@ -11,9 +12,11 @@ using RestaurantReservation.DB;
 namespace RestaurantReservation.DB.Migrations
 {
     [DbContext(typeof(RestaurantReservationDbContext))]
-    partial class RestaurantReservationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250511171106_AddUserEntity")]
+    partial class AddUserEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -736,22 +739,6 @@ namespace RestaurantReservation.DB.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Password = "12345",
-                            Role = 2,
-                            Username = "ruba"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Password = "12345",
-                            Role = 1,
-                            Username = "ali"
-                        });
                 });
 
             modelBuilder.Entity("RestaurantReservation.DB.Views.EmployeeWithRestaurantDetails", b =>

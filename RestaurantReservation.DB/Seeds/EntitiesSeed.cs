@@ -17,6 +17,7 @@ public static class EntitiesSeed
         var employees = DataSeed.SeedEmployees();
         var reservations = DataSeed.SeedReservations();
         var openingHours = DataSeed.SeedOpeningHours();
+        var users = DataSeed.SeedUsers();
         
         modelBuilder.Entity<Customer>().HasData(customers);
         modelBuilder.Entity<Restaurant>().HasData(restaurants);
@@ -28,5 +29,6 @@ public static class EntitiesSeed
         modelBuilder.Entity<OrderItem>().HasData(orderItems);
         modelBuilder.Entity<Order>().HasData(orders);
         modelBuilder.Entity<PaymentDetail>().HasData(paymentDetails);
+        modelBuilder.Entity<User>().HasData(users);
     }
 }

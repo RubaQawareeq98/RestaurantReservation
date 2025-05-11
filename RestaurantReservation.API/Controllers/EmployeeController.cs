@@ -127,12 +127,12 @@ public class EmployeeController(IEmployeeRepository employeeRepository, IMapper 
         {
             return NotFound("Employee not found");
         }
-        var TotalAverageAmount = await employeeRepository.CalculateAverageOrderAmount(employeeId);
+        var totalAverageAmount = await employeeRepository.CalculateAverageOrderAmount(employeeId);
         
         return Ok(
             new
         {
-            TotalAverageAmount
+            totalAverageAmount
         });
     }
 }

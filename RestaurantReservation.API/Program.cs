@@ -2,6 +2,9 @@ using System.Text.Json.Serialization;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using RestaurantReservation.API.Configurations;
+using RestaurantReservation.API.Services;
+using RestaurantReservation.API.Services.Interfaces;
 using RestaurantReservation.API.Validator;
 using RestaurantReservation.DB;
 using RestaurantReservation.DB.Repositories.Interfaces;
@@ -14,6 +17,14 @@ public static class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        
+        var jwtConfig = builder.Configuration
+            .GetSection("Authentication")
+            .Get<JwtConfiguration>();
+        
+        ArgumentNullException.ThrowIfNull(jwtConfig);
+
+        builder.Services.AddSingleton(jwtConfig);
 
         // Add services to the container.
         builder.Services.AddFluentValidationAutoValidation();
@@ -42,6 +53,8 @@ public static class Program
         builder.Services.AddScoped<IMenuItemRepository, MenuItemRepository>();
         builder.Services.AddScoped<IRestaurantRepository, RestaurantRepository>();
         builder.Services.AddScoped<ITableRepository, TableRepository>();
+        builder.Services.AddScoped<IJwtTokenGeneratorService, JwtTokenGeneratorService>();
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
         
         
         builder.Services.AddDbContext<RestaurantReservationDbContext>(options =>

@@ -1,17 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
-using MinimalWebApi.Models;
-using MinimalWebApi.Services;
+using RestaurantReservation.API.Models.Authentication;
+using RestaurantReservation.API.Services.Interfaces;
 
-namespace MinimalWebApi.Controllers;
+namespace RestaurantReservation.API.Controllers;
 
 [Route("api/authentication")]
 [ApiController]
 public class AuthenticationController(IJwtTokenGeneratorService jwtTokenGeneratorService) : ControllerBase
 {
     [HttpPost("login")]
-    public async Task<ActionResult<string>> Login([FromBody] LoginRequestBody request)
+    public async Task<ActionResult<string>> Login([FromBody] loginRequestBodyDto requestBody)
     {
-        var accessToken = await jwtTokenGeneratorService.GenerateToken(request.Username, request.Password);
+        var accessToken = await jwtTokenGeneratorService.GenerateToken(requestBody.Username, requestBody.Password);
         if (accessToken is null)
         {
             return Unauthorized();

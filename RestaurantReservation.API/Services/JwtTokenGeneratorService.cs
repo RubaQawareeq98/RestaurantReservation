@@ -1,11 +1,11 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 using Microsoft.IdentityModel.Tokens;
-using MinimalWebApi.Configurations;
-using MinimalWebApi.Repositories;
+using RestaurantReservation.API.Configurations;
+using RestaurantReservation.API.Services.Interfaces;
+using RestaurantReservation.DB.Repositories.Interfaces;
 
-namespace MinimalWebApi.Services;
+namespace RestaurantReservation.API.Services;
 
 public class JwtTokenGeneratorService(JwtConfiguration configuration, IUserRepository userRepository) : IJwtTokenGeneratorService
 {
@@ -15,7 +15,7 @@ public class JwtTokenGeneratorService(JwtConfiguration configuration, IUserRepos
         {
             return null;
         }
-        var user = await userRepository.GetUserAsync(username, password);
+        var user = await userRepository.GetByUserNameAsync(username, password);
         if (user is null)
         {
             return null;
@@ -29,8 +29,8 @@ public class JwtTokenGeneratorService(JwtConfiguration configuration, IUserRepos
         var claimsForToken = new List<Claim>
         {
             new("sub", user.Id.ToString()),
-            new("firstName", user.FirstName),
-            new("email", user.Email),
+            new("userName", user.Username),
+            new("role", user.Role.ToString()),
         };
 
         var jwt = new JwtSecurityToken(
@@ -45,31 +45,5 @@ public class JwtTokenGeneratorService(JwtConfiguration configuration, IUserRepos
         var token = tokenHandler.WriteToken(jwt);
             
         return token;
-    }
-    
-    public ClaimsPrincipal? ValidateToken(string token)
-    {
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.UTF8.GetBytes(configuration.SecretKey);
-
-        var parameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = configuration.Issuer,
-            ValidAudience = configuration.Audience,
-            IssuerSigningKey = new SymmetricSecurityKey(key)
-        };
-
-        try
-        {
-            return tokenHandler.ValidateToken(token, parameters, out _);
-        }
-        catch
-        {
-            return null;
-        }
     }
 }

@@ -1,10 +1,7 @@
-using System.Security.Claims;
 
-namespace MinimalWebApi.Services;
+namespace RestaurantReservation.API.Services.Interfaces;
 
 public interface IJwtTokenGeneratorService
 {
     Task<string?> GenerateToken(string? username, string? password);
-    public ClaimsPrincipal? ValidateToken(string token);
-
 }

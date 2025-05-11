@@ -1,4 +1,4 @@
-namespace MinimalWebApi.Configurations;
+namespace RestaurantReservation.API.Configurations;
 
 public class JwtConfiguration
 {

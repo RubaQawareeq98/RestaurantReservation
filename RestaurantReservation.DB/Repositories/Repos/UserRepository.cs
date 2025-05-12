@@ -8,10 +8,17 @@ public class UserRepository (RestaurantReservationDbContext context) : BaseRepos
 {
     private readonly RestaurantReservationDbContext _context = context;
 
-    public async Task<User?> GetByUserNameAsync(string userName, string password)
+    public async Task<User?> GetUserAsync(string userName, string password)
     {
         var user = await _context.Users
             .FirstOrDefaultAsync(u => u.Username == userName && u.Password == password);
+        return user;
+    }
+
+    public async Task<User?> GetByUserNameAsync(string userName)
+    {
+        var user = await _context.Users
+            .FirstOrDefaultAsync(u => u.Username == userName);
         return user;
     }
 }

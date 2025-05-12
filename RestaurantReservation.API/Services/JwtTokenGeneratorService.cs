@@ -15,7 +15,7 @@ public class JwtTokenGeneratorService(JwtConfiguration configuration, IUserRepos
         {
             return null;
         }
-        var user = await userRepository.GetByUserNameAsync(username, password);
+        var user = await userRepository.GetUserAsync(username, password);
         if (user is null)
         {
             return null;

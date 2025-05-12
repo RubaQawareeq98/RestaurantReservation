@@ -4,5 +4,6 @@ namespace RestaurantReservation.DB.Repositories.Interfaces;
 
 public interface IUserRepository : IBaseRepository<User>
 {
-    Task<User?> GetByUserNameAsync(string userName, string password);
+    Task<User?> GetUserAsync(string userName, string password);
+    Task<User?> GetByUserNameAsync(string userName);
 }

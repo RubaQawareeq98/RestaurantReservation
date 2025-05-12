@@ -38,7 +38,7 @@ public class JwtTokenGeneratorService(JwtConfiguration configuration, IUserRepos
             configuration.Audience,
             claimsForToken,
             DateTime.UtcNow,
-            DateTime.UtcNow.AddHours(1),
+            DateTime.UtcNow.AddMinutes(configuration.TokenExpirationMinutes),
             signingCredentials
         );
         var tokenHandler = new JwtSecurityTokenHandler();

@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using RestaurantReservation.API.Configurations;
 using RestaurantReservation.API.Models.Authentication;
 using RestaurantReservation.API.Services.Interfaces;
 using RestaurantReservation.DB.Models.Entities;
@@ -12,7 +13,8 @@ namespace RestaurantReservation.API.Controllers;
 [ApiController]
 public class AuthenticationController(IJwtTokenGeneratorService jwtTokenGeneratorService,
     IUserRepository userRepository,
-    IMapper mapper) : ControllerBase
+    IMapper mapper,
+    JwtConfiguration jwtConfiguration) : ControllerBase
 {
     [HttpPost("login")]
     public async Task<ActionResult<string>> Login([FromBody] LoginRequestBodyDto requestBody)
@@ -22,10 +24,13 @@ public class AuthenticationController(IJwtTokenGeneratorService jwtTokenGenerato
         {
             return Unauthorized();
         }
-        return Ok(new
+        
+        var response = new AuthResponseDto
         {
-            accessToken
-        });
+            AccessToken = accessToken,
+            ExpirationInMinuts = jwtConfiguration.TokenExpirationMinutes
+        };
+        return Ok(response);
     }
     
     [HttpPost("signup")]
@@ -42,9 +47,11 @@ public class AuthenticationController(IJwtTokenGeneratorService jwtTokenGenerato
         
         var accessToken = await jwtTokenGeneratorService.GenerateToken(requestBody.Username, requestBody.Password);
         
-        return Ok(new
+        var response = new AuthResponseDto
         {
-            accessToken
-        });
+            AccessToken = accessToken,
+            ExpirationInMinuts = jwtConfiguration.TokenExpirationMinutes
+        };
+        return Ok(response);
     }
 }

@@ -18,5 +18,6 @@ public static class ServiceExtension
         services.AddScoped<IMenuItemRepository, MenuItemRepository>();
         services.AddScoped<IRestaurantRepository, RestaurantRepository>();
         services.AddScoped<ITableRepository, TableRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
     }
 }

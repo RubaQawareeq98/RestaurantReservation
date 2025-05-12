@@ -9,13 +9,22 @@ public class MenuItemRepository(RestaurantReservationDbContext context)
 {
     private readonly RestaurantReservationDbContext _context = context;
 
-    public async Task<List<MenuItem>> ListOrderedMenuItems(int reservationId)
+    public async Task<(List<MenuItem> data, PaginationResponse paginationResponse)> ListOrderedMenuItems(
+        int reservationId, int pageNumber, int pageSize)
     {
         await EnsureEntityExist(reservationId);
         
-        return await _context.OrderItems
+        var items = _context.OrderItems
             .Where(o => o.Order.ReservationId == reservationId)
-            .Select(o => o.MenuItem)
+            .Select(o => o.MenuItem);
+        
+        var data = await items
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
+        
+        var paginationResponse = new PaginationResponse(data.Count, pageNumber, pageSize);
+
+        return (data, paginationResponse);
     }
 }

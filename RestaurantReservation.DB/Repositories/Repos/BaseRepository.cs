@@ -36,10 +36,19 @@ public class BaseRepository<T>(RestaurantReservationDbContext context) : IBaseRe
         await context.SaveChangesAsync();
     }
 
-    public virtual async Task<List<T>> GetAllAsync()
+    public virtual async Task<(List<T> data, PaginationResponse paginationResponse)> GetAllAsync(int pageNumber,
+        int pageSize)
     {
-        var data = await _entitySet.ToListAsync();
-        return data;
+        var list = await _entitySet.ToListAsync();
+        
+        var data = list
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+        
+        var paginationResponse = new PaginationResponse(list.Count, pageNumber, pageSize);
+
+        return (data, paginationResponse);
     }
 
     public async Task EnsureEntityExist(int id)
@@ -49,5 +58,10 @@ public class BaseRepository<T>(RestaurantReservationDbContext context) : IBaseRe
         {
             throw new RecordNotFoundException($"{typeof(T)} with id: {id} not found");
         }
+    }
+
+    public async Task<T?> GetByIdAsync(int id)
+    {
+        return await _entitySet.FirstOrDefaultAsync(e => e.Id == id);
     }
 }

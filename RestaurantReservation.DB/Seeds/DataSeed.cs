@@ -231,4 +231,25 @@ public static class DataSeed
             }
         ];
     }
+
+    public static List<User> SeedUsers()
+    {
+        return
+        [
+            new User
+            {
+                Id = 1,
+                Username = "ruba",
+                Password = "12345",
+                Role = UserRole.User
+            },
+            new User
+            {
+                Id = 2,
+                Username = "ali",
+                Password = "12345",
+                Role = UserRole.Admin
+            }
+        ];
+    }
 }

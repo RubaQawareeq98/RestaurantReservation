@@ -24,6 +24,8 @@ public class MenuItemItemController(IMenuItemRepository menuItemRepository, IMap
     /// <returns></returns>
     
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<MenuItem>>> GetMenuItems(int pageNumber, int pageSize)
     {
         if (pageNumber < 1 || pageSize < 1)
@@ -38,8 +40,15 @@ public class MenuItemItemController(IMenuItemRepository menuItemRepository, IMap
 
         return Ok(mapper.Map<List<MenuItemResponseDto>>(data));
     }
-
+    
+    /// <summary>
+    /// Get Menu Item by menu item id
+    /// </summary>
+    /// <param name="menuItemId"></param>
+    /// <returns></returns>
     [HttpGet("{menuItemId:int}", Name ="GetMenuItemById")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<MenuItem>> GetMenuItem(int menuItemId)
     {
         var menuItem = await menuItemRepository.GetByIdAsync(menuItemId);
@@ -57,6 +66,7 @@ public class MenuItemItemController(IMenuItemRepository menuItemRepository, IMap
     /// <param name="menuItemRequest"></param>
     /// <returns>created menuItem</returns>
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult<MenuItemResponseDto>> AddMenuItem(MenuItemRequestBodyDto menuItemRequest)
     {
         var menuItem = mapper.Map<MenuItem>(menuItemRequest);
@@ -75,6 +85,8 @@ public class MenuItemItemController(IMenuItemRepository menuItemRepository, IMap
     /// <param name="menuItemRequestBody"></param>
     /// <returns></returns>
     [HttpPut("{menuItemId:int}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<MenuItemResponseDto>> UpdateMenuItem(int menuItemId,
         MenuItemRequestBodyDto menuItemRequestBody)
     {
@@ -93,8 +105,9 @@ public class MenuItemItemController(IMenuItemRepository menuItemRepository, IMap
     /// </summary>
     /// <param name="menuItemId"></param>
     /// <returns></returns>
-    
     [HttpDelete("{menuItemId:int}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<MenuItemResponseDto>> DeleteMenuItem(int menuItemId)
     {
         var menuItem = await menuItemRepository.GetByIdAsync(menuItemId);

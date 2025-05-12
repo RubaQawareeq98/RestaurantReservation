@@ -22,8 +22,9 @@ public class OrderController(IOrderRepository orderRepository, IMapper mapper) :
     /// <param name="pageNumber"></param>
     /// <param name="pageSize"></param>
     /// <returns></returns>
-    
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<Order>>> GetOrders(int pageNumber, int pageSize)
     {
         if (pageNumber < 1 || pageSize < 1)
@@ -39,7 +40,14 @@ public class OrderController(IOrderRepository orderRepository, IMapper mapper) :
         return Ok(mapper.Map<List<OrderResponseDto>>(data));
     }
 
+    /// <summary>
+    /// Get Order by order id
+    /// </summary>
+    /// <param name="orderId"></param>
+    /// <returns></returns>
     [HttpGet("{orderId:int}", Name ="GetOrderById")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<Order>> GetOrder(int orderId)
     {
         var order = await orderRepository.GetByIdAsync(orderId);
@@ -57,6 +65,7 @@ public class OrderController(IOrderRepository orderRepository, IMapper mapper) :
     /// <param name="orderRequest"></param>
     /// <returns>created order</returns>
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult<OrderResponseDto>> AddOrder(OrderRequestBodyDto orderRequest)
     {
         var order = mapper.Map<Order>(orderRequest);
@@ -75,6 +84,8 @@ public class OrderController(IOrderRepository orderRepository, IMapper mapper) :
     /// <param name="orderRequestBody"></param>
     /// <returns></returns>
     [HttpPut("{orderId:int}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<OrderResponseDto>> UpdateOrder(int orderId,
         OrderRequestBodyDto orderRequestBody)
     {
@@ -93,8 +104,9 @@ public class OrderController(IOrderRepository orderRepository, IMapper mapper) :
     /// </summary>
     /// <param name="orderId"></param>
     /// <returns></returns>
-    
     [HttpDelete("{orderId:int}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<OrderResponseDto>> DeleteOrder(int orderId)
     {
         var order = await orderRepository.GetByIdAsync(orderId);

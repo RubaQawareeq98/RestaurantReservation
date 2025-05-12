@@ -24,6 +24,8 @@ public class CustomerController(ICustomerRepository customerRepository, IMapper 
     /// <returns></returns>
     
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<List<Customer>>> GetCustomer(int pageNumber, int pageSize)
     {
         if (pageNumber < 1 || pageSize < 1)
@@ -38,12 +40,14 @@ public class CustomerController(ICustomerRepository customerRepository, IMapper 
 
         return Ok(mapper.Map<List<CustomerResponseDto>>(data));
     }
+    
     /// <summary>
     /// Get customer by customer ID
     /// </summary>
     /// <param name="customerId"></param>
     /// <returns></returns>
-
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpGet("{customerId:int}", Name ="GetCustomerById")]
     public async Task<ActionResult<Customer>> GetCustomer(int customerId)
     {
@@ -62,6 +66,7 @@ public class CustomerController(ICustomerRepository customerRepository, IMapper 
     /// <param name="customerRequest"></param>
     /// <returns>created customer</returns>
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult<CustomerResponseDto>> AddCustomer(CustomerRequestBodyDto customerRequest)
     {
         var customer = mapper.Map<Customer>(customerRequest);
@@ -80,6 +85,8 @@ public class CustomerController(ICustomerRepository customerRepository, IMapper 
     /// <param name="customerRequestBody"></param>
     /// <returns></returns>
     [HttpPut("{customerId:int}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<CustomerResponseDto>> UpdateCustomer(int customerId,
         CustomerRequestBodyDto customerRequestBody)
     {
@@ -98,7 +105,8 @@ public class CustomerController(ICustomerRepository customerRepository, IMapper 
     /// </summary>
     /// <param name="customerId"></param>
     /// <returns></returns>
-    
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [HttpDelete("{customerId:int}")]
     public async Task<ActionResult<CustomerResponseDto>> DeleteCustomer(int customerId)
     {

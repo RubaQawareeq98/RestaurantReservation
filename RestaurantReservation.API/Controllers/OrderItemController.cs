@@ -22,8 +22,9 @@ public class OrderItemItemController(IOrderItemRepository orderItemRepository, I
     /// <param name="pageNumber"></param>
     /// <param name="pageSize"></param>
     /// <returns></returns>
-    
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<OrderItem>>> GetOrderItems(int pageNumber, int pageSize)
     {
         if (pageNumber < 1 || pageSize < 1)
@@ -39,7 +40,14 @@ public class OrderItemItemController(IOrderItemRepository orderItemRepository, I
         return Ok(mapper.Map<List<OrderItemResponseDto>>(data));
     }
 
+    /// <summary>
+    /// Get Order item by order item id
+    /// </summary>
+    /// <param name="orderItemId"></param>
+    /// <returns></returns>
     [HttpGet("{orderItemId:int}", Name ="GetOrderItemById")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<OrderItem>> GetOrderItem(int orderItemId)
     {
         var orderItem = await orderItemRepository.GetByIdAsync(orderItemId);
@@ -57,6 +65,7 @@ public class OrderItemItemController(IOrderItemRepository orderItemRepository, I
     /// <param name="orderItemRequest"></param>
     /// <returns>created orderItem</returns>
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult<OrderItemResponseDto>> AddOrderItem(OrderItemRequestBodyDto orderItemRequest)
     {
         var orderItem = mapper.Map<OrderItem>(orderItemRequest);
@@ -75,6 +84,8 @@ public class OrderItemItemController(IOrderItemRepository orderItemRepository, I
     /// <param name="orderItemRequestBody"></param>
     /// <returns></returns>
     [HttpPut("{orderItemId:int}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<OrderItemResponseDto>> UpdateOrderItem(int orderItemId,
         OrderItemRequestBodyDto orderItemRequestBody)
     {
@@ -93,8 +104,9 @@ public class OrderItemItemController(IOrderItemRepository orderItemRepository, I
     /// </summary>
     /// <param name="orderItemId"></param>
     /// <returns></returns>
-    
     [HttpDelete("{orderItemId:int}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<OrderItemResponseDto>> DeleteOrderItem(int orderItemId)
     {
         var orderItem = await orderItemRepository.GetByIdAsync(orderItemId);

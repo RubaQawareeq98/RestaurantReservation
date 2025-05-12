@@ -25,6 +25,8 @@ public class TableController(ITableRepository tableRepository, IMapper mapper) :
     /// <returns></returns>
     
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<Table>>> GetTables(int pageNumber, int pageSize)
     {
         if (pageNumber < 1 || pageSize < 1)
@@ -39,8 +41,15 @@ public class TableController(ITableRepository tableRepository, IMapper mapper) :
 
         return Ok(mapper.Map<List<TableResponseDto>>(data));
     }
-
+    
+    /// <summary>
+    /// Get tables by table id
+    /// </summary>
+    /// <param name="tableId"></param>
+    /// <returns></returns>
     [HttpGet("{tableId:int}", Name ="GetTableById")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<Table>> GetTable(int tableId)
     {
         var table = await tableRepository.GetByIdAsync(tableId);
@@ -58,6 +67,7 @@ public class TableController(ITableRepository tableRepository, IMapper mapper) :
     /// <param name="tableRequest"></param>
     /// <returns>created Table</returns>
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult<TableResponseDto>> AddTable(TableRequestBodyDto tableRequest)
     {
         var table = mapper.Map<Table>(tableRequest);
@@ -76,6 +86,8 @@ public class TableController(ITableRepository tableRepository, IMapper mapper) :
     /// <param name="tableRequestBody"></param>
     /// <returns></returns>
     [HttpPut("{tableId:int}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<TableResponseDto>> UpdateTable(int tableId,
         TableRequestBodyDto tableRequestBody)
     {
@@ -94,8 +106,9 @@ public class TableController(ITableRepository tableRepository, IMapper mapper) :
     /// </summary>
     /// <param name="tableId"></param>
     /// <returns></returns>
-    
     [HttpDelete("{tableId:int}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<TableResponseDto>> DeleteTable(int tableId)
     {
         var table = await tableRepository.GetByIdAsync(tableId);

@@ -30,8 +30,9 @@ public class ReservationController(IReservationRepository reservationRepository,
     /// <param name="pageNumber"></param>
     /// <param name="pageSize"></param>
     /// <returns></returns>
-    
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<Reservation>>> GetReservations(int pageNumber, int pageSize)
     {
         if (pageNumber < 1 || pageSize < 1)
@@ -47,7 +48,14 @@ public class ReservationController(IReservationRepository reservationRepository,
         return Ok(mapper.Map<List<ReservationResponseDto>>(data));
     }
 
+    /// <summary>
+    /// Get Reservation by reservation id
+    /// </summary>
+    /// <param name="reservationId"></param>
+    /// <returns></returns>
     [HttpGet("{reservationId:int}", Name ="GetReservationById")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<Reservation>> GetReservation(int reservationId)
     {
         var reservation = await reservationRepository.GetByIdAsync(reservationId);
@@ -65,6 +73,7 @@ public class ReservationController(IReservationRepository reservationRepository,
     /// <param name="reservationRequest"></param>
     /// <returns>created Reservation</returns>
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult<ReservationResponseDto>> AddReservation(ReservationRequestDto reservationRequest)
     {
         var reservation = mapper.Map<Reservation>(reservationRequest);
@@ -83,6 +92,8 @@ public class ReservationController(IReservationRepository reservationRepository,
     /// <param name="reservationRequestBody"></param>
     /// <returns></returns>
     [HttpPut("{reservationId:int}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<ReservationResponseDto>> UpdateReservation(int reservationId,
         ReservationRequestDto reservationRequestBody)
     {
@@ -101,8 +112,9 @@ public class ReservationController(IReservationRepository reservationRepository,
     /// </summary>
     /// <param name="reservationId"></param>
     /// <returns></returns>
-    
     [HttpDelete("{reservationId:int}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<ReservationResponseDto>> DeleteReservation(int reservationId)
     {
         var reservation = await reservationRepository.GetByIdAsync(reservationId);
@@ -121,8 +133,9 @@ public class ReservationController(IReservationRepository reservationRepository,
     /// <param name="pageSize"></param>
     /// <param name="customerId"></param>
     /// <returns></returns>
-
     [HttpGet("customer/{customerId:int}")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<Reservation>>> GetReservationsByCustomerId(int pageNumber, int pageSize,
         int customerId)
     {
@@ -147,6 +160,8 @@ public class ReservationController(IReservationRepository reservationRepository,
     /// <param name="reservationId"></param>
     /// <returns></returns>
     [HttpGet("{reservationId:int}/orders")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<OrderWithMenuItem>>> GetReservationOrders(int pageNumber, int pageSize,
         int reservationId)
     {
@@ -170,8 +185,9 @@ public class ReservationController(IReservationRepository reservationRepository,
     /// <param name="pageSize"></param>
     /// <param name="reservationId"></param>
     /// <returns></returns>
-    
     [HttpGet("{reservationId:int}/menu-items")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<OrderWithMenuItem>>> GetReservationMenuItems(int pageNumber, int pageSize,
         int reservationId)
     {

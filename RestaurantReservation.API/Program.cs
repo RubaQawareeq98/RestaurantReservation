@@ -1,4 +1,6 @@
+using System.Reflection;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RestaurantReservation.API.Middlewares;
 using RestaurantReservation.API.ServiceRegistration;
@@ -18,16 +20,32 @@ public static class Program
         builder.Services.RegisterServices();
 
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen(); 
-        builder.Services.AddControllers().AddJsonOptions(options =>
+        
+        builder.Services.AddSwaggerGen(c =>
         {
-            options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            c.IncludeXmlComments(xmlPath);
         });
+
+        builder.Services.AddControllers()
+            .AddJsonOptions(options =>
+
+            {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
         
         builder.Services.AddDbContext<RestaurantReservationDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnectionString")));
         
         builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+        
+        builder.Services.AddApiVersioning(options =>
+        {
+            options.AssumeDefaultVersionWhenUnspecified = true;
+            options.DefaultApiVersion = new ApiVersion(1, 0);
+            options.ReportApiVersions = true;
+        });
         
         var app = builder.Build();
 

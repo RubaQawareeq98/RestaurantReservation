@@ -1,7 +1,7 @@
 using System.Text.Json;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RestaurantReservation.API.Mappers;
 using RestaurantReservation.API.Models.Tables;
 using RestaurantReservation.DB.Models.Entities;
 using RestaurantReservation.DB.Repositories.Interfaces;
@@ -13,7 +13,7 @@ namespace RestaurantReservation.API.Controllers;
 [Route("api/tables")]
 [Authorize]
 [ApiController]
-public class TableController(ITableRepository tableRepository, IMapper mapper) : ControllerBase
+public class TableController(ITableRepository tableRepository, TableMapper mapper) : ControllerBase
 {
     private int _maxPageSize = 80;
     
@@ -39,7 +39,7 @@ public class TableController(ITableRepository tableRepository, IMapper mapper) :
         var (data, paginationResponse) = await tableRepository.GetAllAsync(pageNumber, pageSize);
         Response.Headers.Append("X-Pagination-Metadata", JsonSerializer.Serialize(paginationResponse));
 
-        return Ok(mapper.Map<List<TableResponseDto>>(data));
+        return Ok(mapper.ToTableResponseDtoList(data));
     }
     
     /// <summary>
@@ -58,7 +58,7 @@ public class TableController(ITableRepository tableRepository, IMapper mapper) :
             return NotFound("No Table found");
         }
 
-        return Ok(mapper.Map<TableResponseDto>(table));
+        return Ok(mapper.ToTableResponseDto(table));
     }
 
     /// <summary>
@@ -70,13 +70,13 @@ public class TableController(ITableRepository tableRepository, IMapper mapper) :
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult<TableResponseDto>> AddTable(TableRequestBodyDto tableRequest)
     {
-        var table = mapper.Map<Table>(tableRequest);
+        var table = mapper.ToTable(tableRequest);
         
         await tableRepository.AddAsync(table);
         
         return CreatedAtRoute("GetTableById", 
             new { tableId = table.Id },
-            mapper.Map<TableResponseDto>(table));
+            mapper.ToTableResponseDto(table));
     }
     
     /// <summary>
@@ -96,7 +96,8 @@ public class TableController(ITableRepository tableRepository, IMapper mapper) :
         {
             return NotFound("No Table found");
         }
-        mapper.Map(tableRequestBody, table);
+
+        table = mapper.ToTable(tableRequestBody);
         await tableRepository.UpdateAsync(table);
         return NoContent();
     }

@@ -1,7 +1,7 @@
 using System.Text.Json;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RestaurantReservation.API.Mappers;
 using RestaurantReservation.API.Models.Restaurants;
 using RestaurantReservation.DB.Models.Entities;
 using RestaurantReservation.DB.Repositories.Interfaces;
@@ -12,7 +12,7 @@ namespace RestaurantReservation.API.Controllers;
 [Route("api/restaurants")]
 [Authorize]
 [ApiController]
-public class RestaurantController(IRestaurantRepository restaurantRepository, IMapper mapper) : ControllerBase
+public class RestaurantController(IRestaurantRepository restaurantRepository, RestaurantMapper mapper) : ControllerBase
 {
     private int _maxPageSize = 80;
     
@@ -37,7 +37,7 @@ public class RestaurantController(IRestaurantRepository restaurantRepository, IM
         var (data, paginationResponse) = await restaurantRepository.GetAllAsync(pageNumber, pageSize);
         Response.Headers.Append("X-Pagination-Metadata", JsonSerializer.Serialize(paginationResponse));
 
-        return Ok(mapper.Map<List<RestaurantResponseDto>>(data));
+        return Ok(mapper.ToRestaurantResponseDtoList(data));
     }
 
     /// <summary>
@@ -56,7 +56,7 @@ public class RestaurantController(IRestaurantRepository restaurantRepository, IM
             return NotFound("No restaurant found");
         }
 
-        return Ok(mapper.Map<RestaurantResponseDto>(restaurant));
+        return Ok(mapper.ToRestaurantResponseDto(restaurant));
     }
 
     /// <summary>
@@ -68,13 +68,13 @@ public class RestaurantController(IRestaurantRepository restaurantRepository, IM
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult<RestaurantResponseDto>> AddRestaurant(RestaurantRequestBodyDto restaurantRequestBody)
     {
-        var restaurant = mapper.Map<Restaurant>(restaurantRequestBody);
+        var restaurant = mapper.ToRestaurant(restaurantRequestBody);
         
         await restaurantRepository.AddAsync(restaurant);
         
         return CreatedAtRoute("GetRestaurantById", 
             new { id = restaurant.Id },
-            mapper.Map<RestaurantResponseDto>(restaurant));
+            mapper.ToRestaurantResponseDto(restaurant));
     }
     
     /// <summary>
@@ -95,7 +95,7 @@ public class RestaurantController(IRestaurantRepository restaurantRepository, IM
         {
             return NotFound("No restaurant found");
         }
-        mapper.Map(restaurantRequestBody, restaurant);
+        restaurant = mapper.ToRestaurant(restaurantRequestBody);
         await restaurantRepository.UpdateAsync(restaurant);
         return NoContent();
     }

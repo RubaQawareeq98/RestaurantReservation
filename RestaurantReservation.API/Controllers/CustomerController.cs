@@ -1,7 +1,7 @@
 using System.Text.Json;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RestaurantReservation.API.Mappers;
 using RestaurantReservation.API.Models.Customers;
 using RestaurantReservation.DB.Models.Entities;
 using RestaurantReservation.DB.Repositories.Interfaces;
@@ -12,7 +12,7 @@ namespace RestaurantReservation.API.Controllers;
 [Route("api/customers")]
 [Authorize]
 [ApiController]
-public class CustomerController(ICustomerRepository customerRepository, IMapper mapper) : ControllerBase
+public class CustomerController(ICustomerRepository customerRepository, CustomerMapper mapper) : ControllerBase
 {
     private int _maxPageSize = 80;
     
@@ -38,7 +38,7 @@ public class CustomerController(ICustomerRepository customerRepository, IMapper 
         var (data, paginationResponse) = await customerRepository.GetAllAsync(pageNumber, pageSize);
         Response.Headers.Append("X-Pagination-Metadata", JsonSerializer.Serialize(paginationResponse));
 
-        return Ok(mapper.Map<List<CustomerResponseDto>>(data));
+        return Ok(mapper.ToCustomerResponseDtoList(data));
     }
     
     /// <summary>
@@ -57,7 +57,7 @@ public class CustomerController(ICustomerRepository customerRepository, IMapper 
             return NotFound("No customer found");
         }
 
-        return Ok(mapper.Map<CustomerResponseDto>(customer));
+        return Ok(mapper.ToCustomerResponseDto(customer));
     }
 
     /// <summary>
@@ -69,13 +69,13 @@ public class CustomerController(ICustomerRepository customerRepository, IMapper 
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult<CustomerResponseDto>> AddCustomer(CustomerRequestBodyDto customerRequest)
     {
-        var customer = mapper.Map<Customer>(customerRequest);
+        var customer = mapper.ToCustomer(customerRequest);
         
         await customerRepository.AddAsync(customer);
         
         return CreatedAtRoute("GetCustomerById", 
             new { customerId = customer.Id },
-            mapper.Map<CustomerResponseDto>(customer));
+            mapper.ToCustomerResponseDto(customer));
     }
     
     /// <summary>
@@ -95,7 +95,11 @@ public class CustomerController(ICustomerRepository customerRepository, IMapper 
         {
             return NotFound("No customer found");
         }
-        mapper.Map(customerRequestBody, customer);
+        customer.FirstName = customerRequestBody.FirstName;
+        customer.LastName = customerRequestBody.LastName;
+        customer.Email = customerRequestBody.Email;
+        customer.PhoneNumber = customerRequestBody.PhoneNumber;
+        
         await customerRepository.UpdateAsync(customer);
         return NoContent();
     }

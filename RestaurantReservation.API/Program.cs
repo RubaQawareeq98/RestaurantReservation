@@ -21,6 +21,8 @@ public static class Program
 
         builder.Services.AddEndpointsApiExplorer();
         
+        
+        
         builder.Services.AddSwaggerGen(c =>
         {
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -38,7 +40,7 @@ public static class Program
         builder.Services.AddDbContext<RestaurantReservationDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnectionString")));
         
-        builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+        builder.Services.RegisterMappers();
         
         builder.Services.AddApiVersioning(options =>
         {

@@ -1,7 +1,7 @@
 using System.Text.Json;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RestaurantReservation.API.Mappers;
 using RestaurantReservation.API.Models.MenuItems;
 using RestaurantReservation.DB.Models.Entities;
 using RestaurantReservation.DB.Repositories.Interfaces;
@@ -12,7 +12,7 @@ namespace RestaurantReservation.API.Controllers;
 [Route("api/menuItems")]
 [Authorize]
 [ApiController]
-public class MenuItemItemController(IMenuItemRepository menuItemRepository, IMapper mapper) : ControllerBase
+public class MenuItemItemController(IMenuItemRepository menuItemRepository, MenuItemMapper mapper) : ControllerBase
 {
     private int _maxPageSize = 80;
     
@@ -38,7 +38,7 @@ public class MenuItemItemController(IMenuItemRepository menuItemRepository, IMap
         var (data, paginationResponse) = await menuItemRepository.GetAllAsync(pageNumber, pageSize);
         Response.Headers.Append("X-Pagination-Metadata", JsonSerializer.Serialize(paginationResponse));
 
-        return Ok(mapper.Map<List<MenuItemResponseDto>>(data));
+        return Ok(mapper.ToMenuItemResponseDtoList(data));
     }
     
     /// <summary>
@@ -57,7 +57,7 @@ public class MenuItemItemController(IMenuItemRepository menuItemRepository, IMap
             return NotFound("No menuItem found");
         }
 
-        return Ok(mapper.Map<MenuItemResponseDto>(menuItem));
+        return Ok(mapper.ToMenuItemResponseDto(menuItem));
     }
 
     /// <summary>
@@ -69,13 +69,13 @@ public class MenuItemItemController(IMenuItemRepository menuItemRepository, IMap
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult<MenuItemResponseDto>> AddMenuItem(MenuItemRequestBodyDto menuItemRequest)
     {
-        var menuItem = mapper.Map<MenuItem>(menuItemRequest);
+        var menuItem = mapper.ToMenuItem(menuItemRequest);
         
         await menuItemRepository.AddAsync(menuItem);
         
         return CreatedAtRoute("GetMenuItemById", 
             new { menuItemId = menuItem.Id },
-            mapper.Map<MenuItemResponseDto>(menuItem));
+            mapper.ToMenuItemResponseDto(menuItem));
     }
     
     /// <summary>
@@ -95,7 +95,10 @@ public class MenuItemItemController(IMenuItemRepository menuItemRepository, IMap
         {
             return NotFound("No menuItem found");
         }
-        mapper.Map(menuItemRequestBody, menuItem);
+        menuItem.Name = menuItemRequestBody.Name;
+        menuItem.Price = menuItemRequestBody.Price;
+        menuItem.Description = menuItemRequestBody.Description;
+        
         await menuItemRepository.UpdateAsync(menuItem);
         return NoContent();
     }

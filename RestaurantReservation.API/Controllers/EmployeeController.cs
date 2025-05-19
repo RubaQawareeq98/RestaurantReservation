@@ -1,7 +1,7 @@
 using System.Text.Json;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RestaurantReservation.API.Mappers;
 using RestaurantReservation.API.Models.Employees;
 using RestaurantReservation.DB.Models.Entities;
 using RestaurantReservation.DB.Repositories.Interfaces;
@@ -12,7 +12,7 @@ namespace RestaurantReservation.API.Controllers;
 [Route("api/employees")]
 [Authorize]
 [ApiController]
-public class EmployeeController(IEmployeeRepository employeeRepository, IMapper mapper) : ControllerBase
+public class EmployeeController(IEmployeeRepository employeeRepository, EmployeeMapper mapper) : ControllerBase
 {
     private int _maxPageSize = 80;
     
@@ -37,7 +37,7 @@ public class EmployeeController(IEmployeeRepository employeeRepository, IMapper 
         var (data, paginationResponse) = await employeeRepository.GetAllAsync(pageNumber, pageSize);
         Response.Headers.Append("X-Pagination-Metadata", JsonSerializer.Serialize(paginationResponse));
 
-        return Ok(mapper.Map<List<EmployeeResponseDto>>(data));
+        return Ok(mapper.ToEmployeeResponseDtoList(data));
     }
 
     [HttpGet("{employeeId:int}", Name ="GetEmployeeById")]
@@ -51,7 +51,7 @@ public class EmployeeController(IEmployeeRepository employeeRepository, IMapper 
             return NotFound("No employee found");
         }
 
-        return Ok(mapper.Map<EmployeeResponseDto>(employee));
+        return Ok(mapper.ToEmployeeResponseDto(employee));
     }
 
     /// <summary>
@@ -63,13 +63,13 @@ public class EmployeeController(IEmployeeRepository employeeRepository, IMapper 
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult<EmployeeResponseDto>> AddEmployee(EmployeeRequestBodyDto employeeRequest)
     {
-        var employee = mapper.Map<Employee>(employeeRequest);
+        var employee = mapper.ToEmployee(employeeRequest);
         
         await employeeRepository.AddAsync(employee);
         
         return CreatedAtRoute("GetEmployeeById", 
             new { employeeId = employee.Id },
-            mapper.Map<EmployeeResponseDto>(employee));
+            mapper.ToEmployeeResponseDto(employee));
     }
     
     /// <summary>
@@ -89,7 +89,11 @@ public class EmployeeController(IEmployeeRepository employeeRepository, IMapper 
         {
             return NotFound("No employee found");
         }
-        mapper.Map(employeeRequestBody, employee);
+        
+        employee.FirstName = employeeRequestBody.FirstName;
+        employee.LastName = employeeRequestBody.LastName;
+        employee.Position = employeeRequestBody.Position;
+        
         await employeeRepository.UpdateAsync(employee);
         return NoContent();
     }
@@ -128,7 +132,7 @@ public class EmployeeController(IEmployeeRepository employeeRepository, IMapper 
         var (managers, paginationResponse) = await employeeRepository.GetManagersAsync(pageNumber, pageSize);
         Response.Headers.Append("X-Pagination-Metadata", JsonSerializer.Serialize(paginationResponse));
 
-        return Ok(mapper.Map<List<EmployeeResponseDto>>(managers));
+        return Ok(mapper.ToEmployeeResponseDtoList(managers));
     }
 
     [HttpGet("{employeeId:int}/average-order-amount")]

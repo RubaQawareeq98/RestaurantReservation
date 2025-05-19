@@ -1,9 +1,7 @@
 using System.Text.Json;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RestaurantReservation.API.Models.MenuItems;
-using RestaurantReservation.API.Models.OrderWithMenuItems;
+using RestaurantReservation.API.Mappers;
 using RestaurantReservation.API.Models.Reservations;
 using RestaurantReservation.DB.DTOS;
 using RestaurantReservation.DB.Models.Entities;
@@ -18,7 +16,9 @@ namespace RestaurantReservation.API.Controllers;
 public class ReservationController(IReservationRepository reservationRepository,
     IOrderRepository orderRepository,
     IMenuItemRepository menuItemRepository,
-    IMapper mapper) : ControllerBase
+    ReservationMapper reservationMapper,
+    OrderWithMenuItemMapper orderWithMenuItemMapper,
+    MenuItemMapper menuItemMapper) : ControllerBase
 {
     private int _maxPageSize = 80;
     private const string Message = "Page number and page size must be greater than 0";
@@ -45,7 +45,7 @@ public class ReservationController(IReservationRepository reservationRepository,
         var (data, paginationResponse) = await reservationRepository.GetAllAsync(pageNumber, pageSize);
         Response.Headers.Append(PaginationHeader, JsonSerializer.Serialize(paginationResponse));
 
-        return Ok(mapper.Map<List<ReservationResponseDto>>(data));
+        return Ok(reservationMapper.ToReservationResponseDtoList(data));
     }
 
     /// <summary>
@@ -64,7 +64,7 @@ public class ReservationController(IReservationRepository reservationRepository,
             return NotFound("No Reservation found");
         }
 
-        return Ok(mapper.Map<ReservationResponseDto>(reservation));
+        return Ok(reservationMapper.ToReservationResponseDto(reservation));
     }
 
     /// <summary>
@@ -76,13 +76,13 @@ public class ReservationController(IReservationRepository reservationRepository,
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult<ReservationResponseDto>> AddReservation(ReservationRequestDto reservationRequest)
     {
-        var reservation = mapper.Map<Reservation>(reservationRequest);
+        var reservation = reservationMapper.ToReservation(reservationRequest);
         
         await reservationRepository.AddAsync(reservation);
         
         return CreatedAtRoute("GetReservationById", 
             new { reservationId = reservation.Id },
-            mapper.Map<ReservationResponseDto>(reservation));
+            reservationMapper.ToReservationResponseDto(reservation));
     }
     
     /// <summary>
@@ -102,7 +102,7 @@ public class ReservationController(IReservationRepository reservationRepository,
         {
             return NotFound("No Reservation found");
         }
-        mapper.Map(reservationRequestBody, reservation);
+        reservation = reservationMapper.ToReservation(reservationRequestBody);
         await reservationRepository.UpdateAsync(reservation);
         return NoContent();
     }
@@ -149,7 +149,7 @@ public class ReservationController(IReservationRepository reservationRepository,
         var (reservations, paginationResponse) = await reservationRepository.GetReservationsByCustomer(customerId, pageNumber, pageSize);
         Response.Headers.Append(PaginationHeader, JsonSerializer.Serialize(paginationResponse));
 
-        return Ok(mapper.Map<List<ReservationResponseDto>>(reservations));
+        return Ok(reservationMapper.ToReservationResponseDtoList(reservations));
     }
     
     /// <summary>
@@ -175,7 +175,7 @@ public class ReservationController(IReservationRepository reservationRepository,
         var (orders, paginationResponse) = await orderRepository.ListOrdersAndMenuItems(reservationId, pageNumber, pageSize);
         Response.Headers.Append(PaginationHeader, JsonSerializer.Serialize(paginationResponse));
 
-        return Ok(mapper.Map<List<OrderWithMenuItemResponseDto>>(orders));
+        return Ok(orderWithMenuItemMapper.ToOrderWithMenuItemResponseDtoList(orders));
     }
     
     /// <summary>
@@ -201,6 +201,6 @@ public class ReservationController(IReservationRepository reservationRepository,
         var (items, paginationResponse) = await menuItemRepository.ListOrderedMenuItems(reservationId, pageNumber, pageSize);
         Response.Headers.Append(PaginationHeader, JsonSerializer.Serialize(paginationResponse));
 
-        return Ok(mapper.Map<List<MenuItemResponseDto>>(items));
+        return Ok(menuItemMapper.ToMenuItemResponseDtoList(items));
     }
 }

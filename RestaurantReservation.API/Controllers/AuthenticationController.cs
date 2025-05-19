@@ -1,9 +1,8 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using RestaurantReservation.API.Configurations;
+using RestaurantReservation.API.Mappers;
 using RestaurantReservation.API.Models.Authentication;
 using RestaurantReservation.API.Services.Interfaces;
-using RestaurantReservation.DB.Models.Entities;
 using RestaurantReservation.DB.Repositories.Interfaces;
 
 namespace RestaurantReservation.API.Controllers;
@@ -13,7 +12,7 @@ namespace RestaurantReservation.API.Controllers;
 [ApiController]
 public class AuthenticationController(IJwtTokenGeneratorService jwtTokenGeneratorService,
     IUserRepository userRepository,
-    IMapper mapper,
+    UserSignupMapper mapper,
     JwtConfiguration jwtConfiguration) : ControllerBase
 {
     [HttpPost("login")]
@@ -41,7 +40,7 @@ public class AuthenticationController(IJwtTokenGeneratorService jwtTokenGenerato
         {
             return BadRequest("User is already exist");
         }
-        var newUser = mapper.Map<User>(requestBody);
+        var newUser = mapper.ToUser(requestBody);
 
         await userRepository.AddAsync(newUser);
         

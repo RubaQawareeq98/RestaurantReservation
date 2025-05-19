@@ -1,7 +1,7 @@
 using System.Text.Json;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RestaurantReservation.API.Mappers;
 using RestaurantReservation.API.Models.OrderItems;
 using RestaurantReservation.DB.Models.Entities;
 using RestaurantReservation.DB.Repositories.Interfaces;
@@ -12,7 +12,7 @@ namespace RestaurantReservation.API.Controllers;
 [Route("api/orderItems")]
 [Authorize]
 [ApiController]
-public class OrderItemItemController(IOrderItemRepository orderItemRepository, IMapper mapper) : ControllerBase
+public class OrderItemItemController(IOrderItemRepository orderItemRepository, OrderItemMapper mapper) : ControllerBase
 {
     private int _maxPageSize = 80;
     
@@ -37,7 +37,7 @@ public class OrderItemItemController(IOrderItemRepository orderItemRepository, I
         var (data, paginationResponse) = await orderItemRepository.GetAllAsync(pageNumber, pageSize);
         Response.Headers.Append("X-Pagination-Metadata", JsonSerializer.Serialize(paginationResponse));
 
-        return Ok(mapper.Map<List<OrderItemResponseDto>>(data));
+        return Ok(mapper.ToOrderItemResponseDtoList(data));
     }
 
     /// <summary>
@@ -56,7 +56,7 @@ public class OrderItemItemController(IOrderItemRepository orderItemRepository, I
             return NotFound("No orderItem found");
         }
 
-        return Ok(mapper.Map<OrderItemResponseDto>(orderItem));
+        return Ok(mapper.ToOrderItemResponseDto(orderItem));
     }
 
     /// <summary>
@@ -68,13 +68,13 @@ public class OrderItemItemController(IOrderItemRepository orderItemRepository, I
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult<OrderItemResponseDto>> AddOrderItem(OrderItemRequestBodyDto orderItemRequest)
     {
-        var orderItem = mapper.Map<OrderItem>(orderItemRequest);
+        var orderItem = mapper.ToOrderItem(orderItemRequest);
         
         await orderItemRepository.AddAsync(orderItem);
         
         return CreatedAtRoute("GetOrderItemById", 
             new { orderItemId = orderItem.Id },
-            mapper.Map<OrderItemResponseDto>(orderItem));
+            mapper.ToOrderItemResponseDto(orderItem));
     }
     
     /// <summary>
@@ -94,7 +94,11 @@ public class OrderItemItemController(IOrderItemRepository orderItemRepository, I
         {
             return NotFound("No orderItem found");
         }
-        mapper.Map(orderItemRequestBody, orderItem);
+        
+        orderItem.Quantity = orderItemRequestBody.Quantity;
+        orderItem.OrderId = orderItemRequestBody.OrderId;
+        orderItem.MenuItemId = orderItemRequestBody.MenuItemId;
+        
         await orderItemRepository.UpdateAsync(orderItem);
         return NoContent();
     }

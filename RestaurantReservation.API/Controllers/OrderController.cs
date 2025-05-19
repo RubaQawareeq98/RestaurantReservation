@@ -1,7 +1,7 @@
 using System.Text.Json;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RestaurantReservation.API.Mappers;
 using RestaurantReservation.API.Models.Orders;
 using RestaurantReservation.DB.Models.Entities;
 using RestaurantReservation.DB.Repositories.Interfaces;
@@ -12,7 +12,7 @@ namespace RestaurantReservation.API.Controllers;
 [Route("api/orders")]
 [Authorize]
 [ApiController]
-public class OrderController(IOrderRepository orderRepository, IMapper mapper) : ControllerBase
+public class OrderController(IOrderRepository orderRepository, OrderMapper mapper) : ControllerBase
 {
     private int _maxPageSize = 80;
     
@@ -37,7 +37,7 @@ public class OrderController(IOrderRepository orderRepository, IMapper mapper) :
         var (data, paginationResponse) = await orderRepository.GetAllAsync(pageNumber, pageSize);
         Response.Headers.Append("X-Pagination-Metadata", JsonSerializer.Serialize(paginationResponse));
 
-        return Ok(mapper.Map<List<OrderResponseDto>>(data));
+        return Ok(mapper.ToOrderResponseDtoList(data));
     }
 
     /// <summary>
@@ -56,7 +56,7 @@ public class OrderController(IOrderRepository orderRepository, IMapper mapper) :
             return NotFound("No order found");
         }
 
-        return Ok(mapper.Map<OrderResponseDto>(order));
+        return Ok(mapper.ToOrderResponseDto(order));
     }
 
     /// <summary>
@@ -68,13 +68,13 @@ public class OrderController(IOrderRepository orderRepository, IMapper mapper) :
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult<OrderResponseDto>> AddOrder(OrderRequestBodyDto orderRequest)
     {
-        var order = mapper.Map<Order>(orderRequest);
+        var order = mapper.ToOrder(orderRequest);
         
         await orderRepository.AddAsync(order);
         
         return CreatedAtRoute("GetOrderById", 
             new { orderId = order.Id },
-            mapper.Map<OrderResponseDto>(order));
+            mapper.ToOrderResponseDto(order));
     }
     
     /// <summary>
@@ -94,7 +94,10 @@ public class OrderController(IOrderRepository orderRepository, IMapper mapper) :
         {
             return NotFound("No order found");
         }
-        mapper.Map(orderRequestBody, order);
+        order.OrderDate = orderRequestBody.OrderDate;
+        order.ReservationId = orderRequestBody.ReservationId;
+        order.EmployeeId = orderRequestBody.EmployeeId;
+        
         await orderRepository.UpdateAsync(order);
         return NoContent();
     }

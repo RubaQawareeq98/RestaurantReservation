@@ -9,10 +9,20 @@ public class ReservationRepository(RestaurantReservationDbContext context)
 {
     private readonly RestaurantReservationDbContext _context = context;
     
-    public async Task<List<Reservation>> GetReservationsByCustomer(int customerId)
+    public async Task<(List<Reservation> data, PaginationResponse paginationResponse)> GetReservationsByCustomer(
+        int customerId, int pageNumber, int pageSize)
     {
-        return await _context.Reservations
+        var reservations =  await _context.Reservations
             .Where(r => r.CustomerId == customerId)
             .ToListAsync();
+        
+        var data = reservations
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+        
+        var paginationResponse = new PaginationResponse(reservations.Count, pageNumber, pageSize);
+
+        return (data, paginationResponse);
     }
 }

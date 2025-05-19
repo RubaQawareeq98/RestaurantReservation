@@ -712,6 +712,48 @@ namespace RestaurantReservation.DB.Migrations
                         });
                 });
 
+            modelBuilder.Entity("RestaurantReservation.DB.Models.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Password = "12345",
+                            Role = 2,
+                            Username = "ruba"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Password = "12345",
+                            Role = 1,
+                            Username = "ali"
+                        });
+                });
+
             modelBuilder.Entity("RestaurantReservation.DB.Views.EmployeeWithRestaurantDetails", b =>
                 {
                     b.Property<int>("EmployeeId")
@@ -727,12 +769,7 @@ namespace RestaurantReservation.DB.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("Position")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("PositionId")
+                    b.Property<int>("Position")
                         .HasColumnType("int");
 
                     b.Property<string>("RestaurantAddress")

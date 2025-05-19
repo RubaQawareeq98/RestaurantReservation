@@ -1,11 +1,11 @@
 using FluentValidation;
 using RestaurantReservation.API.Models.Orders.PaymentDetails;
 
-namespace RestaurantReservation.API.Validator;
+namespace RestaurantReservation.API.Validators;
 
-public abstract class PaymentDetailsRequestValidator : AbstractValidator<PaymentDetailDto>
+public class PaymentDetailsRequestValidator : AbstractValidator<PaymentDetailDto>
 {
-    protected PaymentDetailsRequestValidator()
+    public PaymentDetailsRequestValidator()
     {
         RuleFor(pd => pd.Amount)
             .NotNull();

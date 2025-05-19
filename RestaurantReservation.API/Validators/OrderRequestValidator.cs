@@ -1,11 +1,11 @@
 using FluentValidation;
 using RestaurantReservation.API.Models.Orders;
 
-namespace RestaurantReservation.API.Validator;
+namespace RestaurantReservation.API.Validators;
 
-public abstract class OrderRequestValidator : AbstractValidator<OrderRequestBodyDto>
+public class OrderRequestValidator : AbstractValidator<OrderRequestBodyDto>
 {
-    protected OrderRequestValidator()
+    public OrderRequestValidator()
     {
         RuleFor(order => order.ReservationId)
             .NotEmpty();
